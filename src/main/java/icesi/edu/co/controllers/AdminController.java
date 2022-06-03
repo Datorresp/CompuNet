@@ -130,7 +130,7 @@ public class AdminController {
 		
 		if (!action.equalsIgnoreCase("Cancelar") || !action.equalsIgnoreCase("Cancel")) {
 			
-			salestaxrateService.save(salestaxrate);
+			salestaxrateService.save(salestaxrate, 1); //CHANGEEEEEEEEEEEEEEE
 		}
 		return "redirect:/admin/sales/";
 	}

@@ -9,11 +9,13 @@ import icesi.edu.co.sales.Salestaxrate;
 @Service
 public interface SalesTaxRateService {
 
-	void save(Salestaxrate sxr);
+	Salestaxrate save(Salestaxrate sxr, Integer i);
 	
-	void update(Salestaxrate sxr, long id);
+	Salestaxrate update(Salestaxrate sxr, Integer id);
 	
-	Optional<Salestaxrate> findByID(long id);
+	Optional<Salestaxrate> findByID(Integer id);
 	
-	void deleteByID(long id);
+	void deleteByID(Integer id);
+
+
 }

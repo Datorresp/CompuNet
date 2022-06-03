@@ -2,9 +2,14 @@ package icesi.edu.co.services;
 
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import icesi.edu.co.DAO.SalestaxRateDao;
+import icesi.edu.co.DAO.StateProvinceDao;
+import icesi.edu.co.person.Stateprovince;
 import icesi.edu.co.repository.SalestaxRateRepo;
 import icesi.edu.co.sales.Salestaxrate;
 
@@ -12,46 +17,92 @@ import icesi.edu.co.sales.Salestaxrate;
 @Service
 public class SalesTaxRateServiceimpl implements SalesTaxRateService{
 
-	SalestaxRateRepo sRepo;	
+
+		private SalestaxRateDao salesRepo;
 	
-	public SalesTaxRateServiceimpl(SalestaxRateRepo sRepo) {
-		this.sRepo = sRepo;
-	}
+		private StateProvinceDao stateRepo;
 
-	@Override
-	public void save(Salestaxrate sxr) {
-		sRepo.save(sxr); 
+		@Autowired
+		public SalesTaxRateServiceimpl(SalestaxRateDao salesRepo,StateProvinceDao stateRepo) {
+			this.salesRepo = salesRepo;
+			this.stateRepo = stateRepo;
+		}
 		
-	}
+		@Transactional
+		@Override
+		public Salestaxrate save(Salestaxrate entity, Integer stateprovinceid) {
+			
+			Salestaxrate aux1 = null;
+			
+			boolean one = (entity.getTaxrate() != null) && (entity.getTaxrate().doubleValue() >= 0);
+			boolean two =  (entity.getName() != null) && entity.getName().length() >= 5;
+			
 
-	@Override
-	public void update(Salestaxrate sxr, long id) {
-		Salestaxrate s1 = sRepo.findById(id).get();
-		s1.setModifieddate(sxr.getModifieddate());
-		s1.setName(sxr.getName());
-		s1.setRowguid(sxr.getRowguid());
-		s1.setSalestaxrateid(sxr.getSalestaxrateid());
-		s1.setStateprovinceid(sxr.getStateprovinceid());
-		s1.setTaxrate(sxr.getTaxrate());
-		s1.setTaxtype(sxr.getTaxtype());
-		sRepo.save(s1);
-	}
-
-	@Override
-	public Optional<Salestaxrate> findByID(long id) {
+			
+			if(one && two) {
+				
+				Optional<Stateprovince> optional = Optional.ofNullable(this.stateRepo.getByInt(stateprovinceid));
+				
+				if(optional.isPresent()) {
+					
+					aux1 = this.salesRepo.save(entity);
+				}else {
+					return aux1 = null;
+				}
+				
+			}else {
+				return aux1 = null;
+			}
+			
+			
+			return aux1;
+		}
 		
-		return sRepo.findById(id);
-	}
+		@Transactional
+		@Override
+		public Salestaxrate update(Salestaxrate entity, Integer stateprovinceid) {
+			
+			boolean one = (entity.getTaxrate() != null) && (entity.getTaxrate().doubleValue() >= 0);
+			boolean two =  (entity.getName() != null) && entity.getName().length() >= 5;
 
-	@Override
-	public void deleteByID(long id) {
-		sRepo.deleteById(id);
-		
-	}
+			if(one && two) {
+			if(entity.getSalestaxrateid() != null) {
+				Optional<Stateprovince> optional = Optional.ofNullable(this.stateRepo.getByInt(stateprovinceid));
+				Optional<Salestaxrate> optinalEntity = Optional.ofNullable(this.salesRepo.getByInt(entity.getSalestaxrateid()));
+				if(optinalEntity.isPresent() && optional.isPresent()) {
+					entity = this.salesRepo.update(entity);
+				}else {
+					return entity = null;
+				}
+				
+			}
+		 }else {
+				return entity = null;
+			}
+			
+			
+			return entity;
+			
+		}
+		@Transactional
+		@Override
+		public Optional<Salestaxrate> findByID(Integer id) {
+			return Optional.ofNullable(salesRepo.getByInt(id));
+		}
+		@Transactional
+		public Iterable<Salestaxrate> findAll() {
+			return salesRepo.getAll();
+		}
+		@Transactional
+		public Salestaxrate getSalestaxrate(Integer id) {
+			return salesRepo.getByInt(id);
+		}
 
-	public Iterable<Salestaxrate> findAll() {
-		
-		return sRepo.findAll();
-	}
+		@Override
+		public void deleteByID(Integer id) {
+			
+			Salestaxrate str= salesRepo.getByInt(id);
+			salesRepo.delete(str);
+		}
 
 }

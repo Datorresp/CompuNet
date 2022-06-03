@@ -60,15 +60,15 @@ public class OperatorController {
 		}
 		
 		if (!action.equalsIgnoreCase("Cancelar") || !action.equalsIgnoreCase("Cancel")) {
-			stateprovinceService.save(stateprovince);
+			stateprovinceService.save(stateprovince, stateprovince.getCountryregion().getCountryregionid());
 		}
 		return "redirect:/user/province/";
 	}
 	
 	
 	@GetMapping("/user/province/edit/{id}")
-	public String showUpdateProvince(@PathVariable("id") Long id,Model model) {
-		Optional<Stateprovince> stateprovince = stateprovinceService.getStateProvince(id);
+	public String showUpdateProvince(@PathVariable("id") Integer id,Model model) {
+		Optional<Stateprovince> stateprovince = Optional.of(stateprovinceService.getStateProvince(id));
 		if (stateprovince == null)
 			throw new IllegalArgumentException("Invalid country Id:" + id);
 		
@@ -99,7 +99,7 @@ public class OperatorController {
 		return "redirect:/user/province/";
 	}
 	
-	//Direcciones
+
 	@GetMapping("/user/address/")
 	public String indexAddress(Model model) {
 		model.addAttribute("addresses", addressService.findAll());
@@ -135,7 +135,7 @@ public class OperatorController {
 	}
 	
 	@GetMapping("/user/address/edit/{id}")
-	public String showUpdateAddress(@PathVariable("id") int id,Model model) {
+	public String showUpdateAddress(@PathVariable("id") Integer id,Model model) {
 		Optional<Address> address = Optional.of(addressService.getAddress(id));
 		if (address == null)
 			throw new IllegalArgumentException("Invalid country Id:" + id);

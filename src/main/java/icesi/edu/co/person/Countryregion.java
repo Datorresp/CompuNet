@@ -29,6 +29,8 @@ public class Countryregion implements Serializable {
 	private Timestamp modifieddate;
 
 	private String name;
+	
+	private Integer countryregionid;
 
 	// bi-directional many-to-one association to Stateprovince
 	@OneToMany(mappedBy = "countryregion")
@@ -81,6 +83,10 @@ public class Countryregion implements Serializable {
 
 	public void setStateprovinces(List<Stateprovince> stateprovinces) {
 		this.stateprovinces = stateprovinces;
+	}
+	
+	public Integer getCountryregionid() {
+		return countryregionid;
 	}
 
 }
