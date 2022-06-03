@@ -3,12 +3,15 @@ package icesi.edu.co.DAOService;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import icesi.edu.co.DAO.CountryRegionDao;
 import icesi.edu.co.DAO.SalestaxRateDao;
 import icesi.edu.co.person.Countryregion;
 import icesi.edu.co.sales.Salestaxrate;
 
+
+@Service
 public class SalesTaxRateDAOService {
 
 	private SalestaxRateDao salesRepo;
@@ -24,7 +27,7 @@ public class SalesTaxRateDAOService {
 	
 	public void update(Integer id) {
 		
-		Salestaxrate b = salesRepo.getByInt(id).get();	
+		Salestaxrate b = salesRepo.getByInt(id);	
 		salesRepo.update(b);
 		
 	}
@@ -38,6 +41,6 @@ public class SalesTaxRateDAOService {
 	}
 	
 	public Optional<Salestaxrate> findByID(Integer id){
-		return salesRepo.getByInt(id);
+		return Optional.of(salesRepo.getByInt(id));
 	}
 }

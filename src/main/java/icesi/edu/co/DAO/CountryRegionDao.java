@@ -5,72 +5,61 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
+
 import icesi.edu.co.person.Countryregion;
 
+
+@Repository
+@Scope("singleton")
 public class CountryRegionDao implements Dao<Countryregion>{
 
-	@PersistenceUnit
-	private EntityManager em;
+	@PersistenceContext
+	private EntityManager entityManager;
+	
+	@Autowired
+	public  CountryRegionDao(EntityManager entityManager) {
+		this.entityManager = entityManager;
+	}
 	
 	@Override
 	@Transactional
-	public void save(Countryregion t) {
-
-
-		em.getTransaction().begin();
-		em.persist(t);
-		em.getTransaction().commit();
-		em.close();
+	public void save(Countryregion entity) {
+		entityManager.persist(entity);
 		
 	}
 
 	@Override
 	@Transactional
-	public void update(Countryregion t) {
-
-		em.getTransaction().begin();
-		em.merge(t);
-		em.getTransaction().commit();
-		em.close();
+	public void update(Countryregion entity) {
+		entityManager.merge(entity);
 		
 	}
 
-	@Transactional
-	public void delete(Countryregion t) {
-
-		em.getTransaction().begin();
-		em.remove(t);
-		em.getTransaction().commit();
-		em.close();
-	}
-	
-	@SuppressWarnings("unchecked")
 	@Override
+	@Transactional
+	public void delete(Countryregion entity) {
+		entityManager.remove(entity);
+	}
+
+	@Override
+	@Transactional
+	public Countryregion getByInt(Integer id) {
+		return entityManager.find(Countryregion.class, id);
+	}
+
+	
+	@Override
+	@Transactional
 	public List<Countryregion> getAll() {
-
-		Query query = em.createQuery("SELECT e FROM Product e");
-		return query.getResultList();
-	}
-
-	@Override
-	public Optional<Countryregion> getByInt(Integer id) {
-
-		return Optional.ofNullable(em.find(Countryregion.class, id));
-	}
-
-	@Override
-	public Optional<Countryregion> getByLong(long id) {
-
-		return Optional.ofNullable(em.find(Countryregion.class, id));
-	}
-	
-	@Transactional
-	public List<Countryregion> findAll() {
 		String jpql = "Select a from Countryregion a";
-		return 	em.createQuery(jpql,Countryregion.class).getResultList();
+		return 	entityManager.createQuery(jpql,Countryregion.class).getResultList();
 	}
 }

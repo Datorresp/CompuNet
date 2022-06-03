@@ -3,6 +3,8 @@ package icesi.edu.co.DAO;
 import java.util.List;
 import java.util.Optional;
 
+import icesi.edu.co.person.Address;
+
 public interface Dao<T> {
 	
 	public void save(T t);
@@ -11,8 +13,9 @@ public interface Dao<T> {
 
 	public List<T> getAll();
 	
-	public Optional<T> getByInt(Integer id);
+	public T getByInt(Integer id);
     
-	public Optional<T> getByLong(long id);
+
+	void delete(T entity);
 	
 }

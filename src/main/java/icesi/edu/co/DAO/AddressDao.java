@@ -5,86 +5,73 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
+
 import icesi.edu.co.person.Address;
 
+@Repository
+@Scope("singleton")
 public class AddressDao implements Dao<Address> {
 
-	@PersistenceUnit
-	private EntityManager entityMF;
+	@PersistenceContext
+	private EntityManager entityManager;
+	
+	@Autowired
+	public AddressDao(EntityManager entityManager) {
+		this.entityManager = entityManager;
+	}
 	
 	@Override
 	@Transactional
-	public void save(Address t) {
-
-		entityMF.getTransaction().begin();
-		entityMF.persist(t);
-		entityMF.getTransaction().commit();
-		entityMF.close();
-		
+	public void save(Address entity) {
+		entityManager.persist(entity);
 	}
 
 	@Override
 	@Transactional
-	public void update(Address t) {
+	public void update(Address entity) {
+		entityManager.merge(entity);
 
-		entityMF.getTransaction().begin();
-		entityMF.merge(t);
-		entityMF.getTransaction().commit();
-		entityMF.close();
-		
 	}
 
-	@Transactional
-	public void delete(Address t) {
-		entityMF.getTransaction().begin();
-		entityMF.remove(t);
-		entityMF.getTransaction().commit();
-		entityMF.close();
-	}
-	
-	@SuppressWarnings("unchecked")
 	@Override
+	@Transactional
+	public void delete(Address entity) {
+		entityManager.remove(entity);
+	}
+
+	@Override
+	@Transactional
+	public Address getByInt(Integer id) {
+		return entityManager.find(Address.class, id);
+	}
+
+	@Override
+	@Transactional
 	public List<Address> getAll() {
-
-		Query query = entityMF.createQuery("SELECT e FROM Product e");
-		return query.getResultList();
-	}
-
-	@Override
-	public Optional<Address> getByInt(Integer id) {
-
-		return Optional.ofNullable(entityMF.find(Address.class, id));
-	}
-
-	@Override
-	public Optional<Address> getByLong(long id) {
-
-		return Optional.ofNullable(entityMF.find(Address.class, id));
-	}
-	
-	
-	@Transactional
-	public List<Address> findAll() {
 		String jpql = "Select a from Address a";
-		return 	((EntityManager) entityMF).createQuery(jpql,Address.class).getResultList();
+		return 	entityManager.createQuery(jpql,Address.class).getResultList();
 	}
 
-	
 	@Transactional
 	public List<Address> getAddressByStateprovinceId(Integer id) {
 		String jpql = "SELECT a FROM Address a WHERE a.stateprovince.stateprovinceid = '" +id +"'";
-        return ((EntityManager) entityMF).createQuery(jpql,Address.class).getResultList();
+        return entityManager.createQuery(jpql,Address.class).getResultList();
 	}
 
-	
+
 	@Transactional
 	public  List<Address> getAddressByCity(String city) {
 	       String jpql = "SELECT a FROM Address a WHERE a.city = '" + city + "'";
-	       return ((EntityManager) entityMF).createQuery(jpql,Address.class).getResultList();
+	       return entityManager.createQuery(jpql,Address.class).getResultList();
 	}
+
 
 }

@@ -3,10 +3,12 @@ package icesi.edu.co.DAOService;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import icesi.edu.co.DAO.StateProvinceDao;
 import icesi.edu.co.person.Stateprovince;
 
+@Service
 public class StateProvinceDAOService {
 
 	private StateProvinceDao stateRepo;
@@ -22,7 +24,7 @@ public class StateProvinceDAOService {
 	
 	public void update(Integer id) {
 		
-		Stateprovince b = stateRepo.getByInt(id).get();	
+		Stateprovince b = stateRepo.getByInt(id);	
 		stateRepo.update(b);
 		
 	}
@@ -36,6 +38,6 @@ public class StateProvinceDAOService {
 	}
 	
 	public Optional<Stateprovince> findByID(Integer id){
-		return stateRepo.getByInt(id);
+		return Optional.of(stateRepo.getByInt(id));
 	}
 }

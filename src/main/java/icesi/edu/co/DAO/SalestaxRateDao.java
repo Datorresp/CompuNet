@@ -5,87 +5,76 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
+
 import icesi.edu.co.person.Countryregion;
 import icesi.edu.co.sales.Salestaxrate;
 
+
+@Repository
+@Scope("singleton")
 public class SalestaxRateDao implements Dao<Salestaxrate>{
 
 	
-	@PersistenceUnit
-	private EntityManager  em;
+	@PersistenceContext
+	private EntityManager entityManager;
+
+	@Autowired
+	public SalestaxRateDao(EntityManager entityManager) {
+		this.entityManager = entityManager;
+	}
 	
 	@Override
 	@Transactional
-	public void save(Salestaxrate t) {
+	public void save(Salestaxrate entity) {
+		entityManager.persist(entity);		
+	}
 
-		em.getTransaction().begin();
-		em.persist(t);
-		em.getTransaction().commit();
-		em.close();
+	@Override
+	@Transactional
+	public void update(Salestaxrate entity) {
+		entityManager.merge(entity);		
+	}
+
+	@Override
+	@Transactional
+	public void delete(Salestaxrate entity) {
+		entityManager.remove(entity);		
 		
 	}
 
 	@Override
 	@Transactional
-	public void update(Salestaxrate t) {
-
-
-		em.getTransaction().begin();
-		em.merge(t);
-		em.getTransaction().commit();
-		em.close();
-		
+	public Salestaxrate getByInt(Integer codigo) {
+		return entityManager.find(Salestaxrate.class, codigo);
 	}
 
-	@Transactional
-	public void delete(Salestaxrate t) {
-
-		em.getTransaction().begin();
-		em.remove(t);
-		em.getTransaction().commit();
-		em.close();
-	}
-	
-	@SuppressWarnings("unchecked")
 	@Override
+	@Transactional
 	public List<Salestaxrate> getAll() {
-
-		Query query = em.createQuery("SELECT e FROM Product e");
-		return query.getResultList();
-	}
-
-	@Override
-	public Optional<Salestaxrate> getByInt(Integer id) {
-
-		return Optional.ofNullable(em.find(Salestaxrate.class, id));
-	}
-
-	@Override
-	public Optional<Salestaxrate> getByLong(long id) {
-
-		return Optional.ofNullable(em.find(Salestaxrate.class, id));
-	}
-	
-	@Transactional
-	public List<Salestaxrate> findAll() {
 		String jpql = "Select a from Salestaxrate a";
-		return 	em.createQuery(jpql,Salestaxrate.class).getResultList();	
+		return 	entityManager.createQuery(jpql,Salestaxrate.class).getResultList();	
 	}
+
 
 	@Transactional
 	public List<Salestaxrate> getSalestaxrateByStateprovince(Integer id) {
 		String jpql = "SELECT str FROM Salestaxrate str WHERE str.stateprovince.stateprovinceid = '"+id+"'";
-		return em.createQuery(jpql,Salestaxrate.class).getResultList();
+		return entityManager.createQuery(jpql,Salestaxrate.class).getResultList();
 	}
+
 
 	@Transactional
 	public List<Salestaxrate> getSalestaxrateByName(String name) {
 		String jpql = "SELECT str FROM Salestaxrate str WHERE str.name = '"+ name + "'";
-		return em.createQuery(jpql,Salestaxrate.class).getResultList();
+		return entityManager.createQuery(jpql,Salestaxrate.class).getResultList();
 	}
 
 }

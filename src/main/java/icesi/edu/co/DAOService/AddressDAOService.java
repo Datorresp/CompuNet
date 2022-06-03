@@ -25,7 +25,7 @@ public class AddressDAOService {
 	
 	public void update(Address address, Integer id) {
 		
-		Address b = addressRepo.getByInt(id).get();	
+		Address b = addressRepo.getByInt(id);	
 		addressRepo.update(b);
 		
 	}
@@ -39,7 +39,7 @@ public class AddressDAOService {
 	}
 	
 	public Optional<Address> findByID(Integer id){
-		return addressRepo.getByInt(id);
+		return Optional.of(addressRepo.getByInt(id));
 	}
 	
 	
