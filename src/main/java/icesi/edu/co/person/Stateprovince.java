@@ -26,7 +26,7 @@ public class Stateprovince implements Serializable {
 	@Id
 	@SequenceGenerator(name = "STATEPROVINCE_STATEPROVINCEID_GENERATOR", allocationSize = 1, sequenceName = "STATEPROVINCE_SEQ")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "STATEPROVINCE_STATEPROVINCEID_GENERATOR")
-	private long stateprovinceid;
+	private int stateprovinceid;
 
 	private String isonlystateprovinceflag;
 
@@ -87,7 +87,7 @@ public class Stateprovince implements Serializable {
 		return this.stateprovincecode;
 	}
 
-	public long getStateprovinceid() {
+	public int getStateprovinceid() {
 		return this.stateprovinceid;
 	}
 
@@ -130,7 +130,7 @@ public class Stateprovince implements Serializable {
 		this.stateprovincecode = stateprovincecode;
 	}
 
-	public void setStateprovinceid(long l) {
+	public void setStateprovinceid(int l) {
 		this.stateprovinceid = l;
 	}
 

@@ -9,11 +9,13 @@ import icesi.edu.co.person.Address;
 @Service
 public interface AddressService {
 
-	Address save(Address a, int i);
+	Address save(Address a, Integer i);
 	
-	void update(Address a, long id);
+	void update(Address a, Integer id);
 	
-	Optional<Address> findByID(long id);
+	Optional<Address> findById(Integer id);
 	
-	void deleteByID(long id);
+	void deleteByID(Integer id);
+
+
 }

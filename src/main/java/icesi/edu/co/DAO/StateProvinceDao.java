@@ -1,13 +1,8 @@
 package icesi.edu.co.DAO;
 
 import java.util.List;
-import java.util.Optional;
-
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +27,18 @@ public class StateProvinceDao implements Dao<Stateprovince> {
 	
 	@Override
 	@Transactional
-	public void save(Stateprovince entity) {
+	public Stateprovince save(Stateprovince entity) {
 		entityManager.persist(entity);
+		return entity;
+
 	}
 
 	@Override
 	@Transactional
-	public void update(Stateprovince entity) {
+	public Stateprovince update(Stateprovince entity) {
 		entityManager.merge(entity);
+		return entity;
+
 	}
 
 	@Override

@@ -1,13 +1,8 @@
 package icesi.edu.co.DAO;
 
 import java.util.List;
-import java.util.Optional;
-
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +25,17 @@ public class AddressDao implements Dao<Address> {
 	
 	@Override
 	@Transactional
-	public void save(Address entity) {
+	public Address save(Address entity) {
 		entityManager.persist(entity);
+		return entity;
+
 	}
 
 	@Override
 	@Transactional
-	public void update(Address entity) {
+	public Address update(Address entity) {
 		entityManager.merge(entity);
+		return entity;
 
 	}
 

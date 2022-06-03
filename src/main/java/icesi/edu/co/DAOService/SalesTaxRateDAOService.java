@@ -5,9 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import icesi.edu.co.DAO.CountryRegionDao;
 import icesi.edu.co.DAO.SalestaxRateDao;
-import icesi.edu.co.person.Countryregion;
 import icesi.edu.co.sales.Salestaxrate;
 
 

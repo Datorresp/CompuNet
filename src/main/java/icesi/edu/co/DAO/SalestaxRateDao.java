@@ -1,20 +1,14 @@
 package icesi.edu.co.DAO;
 
 import java.util.List;
-import java.util.Optional;
-
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
-import icesi.edu.co.person.Countryregion;
 import icesi.edu.co.sales.Salestaxrate;
 
 
@@ -33,14 +27,18 @@ public class SalestaxRateDao implements Dao<Salestaxrate>{
 	
 	@Override
 	@Transactional
-	public void save(Salestaxrate entity) {
-		entityManager.persist(entity);		
+	public Salestaxrate save(Salestaxrate entity) {
+		entityManager.persist(entity);
+		return entity;
+
 	}
 
 	@Override
 	@Transactional
-	public void update(Salestaxrate entity) {
-		entityManager.merge(entity);		
+	public Salestaxrate update(Salestaxrate entity) {
+		entityManager.merge(entity);
+		return entity;
+
 	}
 
 	@Override

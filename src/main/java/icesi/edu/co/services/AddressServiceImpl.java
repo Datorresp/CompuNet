@@ -2,9 +2,13 @@ package icesi.edu.co.services;
 
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import icesi.edu.co.DAO.AddressDao;
+import icesi.edu.co.DAO.StateProvinceDao;
 import icesi.edu.co.person.Address;
 import icesi.edu.co.person.Stateprovince;
 import icesi.edu.co.repository.AddressRepo;
@@ -13,80 +17,96 @@ import icesi.edu.co.repository.StateProvinceRepo;
 @Service	
 public class AddressServiceImpl implements AddressService{
 
-	private AddressRepo addressRepo;
-	private StateProvinceRepo stateprovinceRepo;
+	private AddressDao addressDao;
+	private StateProvinceDao stateprovinceDao;
+	
+	//Constructor
+	@Autowired
+	public AddressServiceImpl(AddressDao addressDao, StateProvinceDao stateprovinceDao) {
+		this.addressDao = addressDao;
+		this.stateprovinceDao = stateprovinceDao;
+	}
 
 	
-	@Autowired
-	public AddressServiceImpl(AddressRepo addressRepo, StateProvinceRepo stateprovinceRepo) {
-		this.addressRepo = addressRepo;
-		this.stateprovinceRepo = stateprovinceRepo;
-	}
-	
+	@Transactional
 	@Override
-	public Address save(Address a, int i) {
+	public Address save(Address entity, Integer stateprovinceid) {
 		Address sAddress = null;
 		
-		boolean addressline1V = (a.getAddressline1() != null) && (!a.getAddressline1().isBlank());
-		boolean cityV = (a.getCity() != null) && (a.getCity().length() >= 3);
-		boolean postalcodeV = (a.getPostalcode() != null) && (String.valueOf(a.getPostalcode()).length() == 6);
+		boolean addressline1V = (entity.getAddressline1() != null) && (!entity.getAddressline1().isBlank());
+		boolean cityV = (entity.getCity() != null) && (entity.getCity().length() >= 3);
+		boolean postalcodeV = (entity.getPostalcode() != null) && (String.valueOf(entity.getPostalcode()).length() == 6);
 		
-		if(a.getPostalcode() != null && !a.getPostalcode().isBlank()){
-			int number = Integer.parseInt(a.getPostalcode());	
+		if(entity.getPostalcode() != null && !entity.getPostalcode().isBlank()){
+			int number = Integer.parseInt(entity.getPostalcode());	
 		}
 		
 		if(addressline1V && cityV && postalcodeV) {
 			
-			Optional<Stateprovince> optional = this.stateprovinceRepo.findById((long) i);
+			Optional<Stateprovince> optional = Optional.ofNullable(this.stateprovinceDao.getByInt(stateprovinceid));
 			
 			if(optional.isPresent()) {
 				
-				a.setStateprovince(optional.get());
+				entity.setStateprovince(optional.get());
 				
-				sAddress = this.addressRepo.save(a);
+				sAddress = this.addressDao.save(entity);
+			}else {
+				return sAddress = null;
 			}
-		}
-		
-		
-		
+		}else {
+			return sAddress = null;
+		}	
 		
 		return sAddress;
 	}
-
-	@Override
-	public void update(Address a, long id) {
-		
-		Address ad = addressRepo.findById(id).get();
-		ad.setAddressid(a.getAddressid());
-		ad.setAddressline1(a.getAddressline1());
-		ad.setAddressline2(a.getAddressline2());
-		ad.setBusinessentityaddresses(a.getBusinessentityaddresses());
-		ad.setCity(a.getCity());
-		ad.setModifieddate(a.getModifieddate());
-		ad.setPostalcode(a.getPostalcode());
-		ad.setRowguid(a.getRowguid());
-		ad.setSpatiallocation(a.getSpatiallocation());
-		ad.setStateprovince(a.getStateprovince());
-		addressRepo.save(ad);
-		
-	}
-
-	@Override
-	public Optional<Address> findByID(long id) {
-		return addressRepo.findById(id);
-	}
-
-	@Override
-	public void deleteByID(long id) {
-		addressRepo.deleteById(id);
-	}
 	
+	@Transactional
+	@Override
+	public void update(Address entity, Integer stateprovinceid) {
+
+		boolean addressline1V = (entity.getAddressline1() != null) && (!entity.getAddressline1().isBlank());
+		boolean cityV = (entity.getCity() != null) && (entity.getCity().length() >= 3);
+		boolean postalcodeV = (entity.getPostalcode() != null) && (String.valueOf(entity.getPostalcode()).length() == 6);
+		
+		if(entity.getPostalcode() != null && !entity.getPostalcode().isBlank()){
+			int number = Integer.parseInt(entity.getPostalcode());	
+		}
+		
+		if(addressline1V && cityV && postalcodeV) {
+		if(entity.getAddressid() != null) {
+			Optional<Address> optinalEntity = Optional.ofNullable(this.addressDao.getByInt(entity.getAddressid()));
+			Optional<Stateprovince> optional = Optional.ofNullable(this.stateprovinceDao.getByInt(stateprovinceid));
+			if(optinalEntity.isPresent() && optional.isPresent()) {
+				entity.setStateprovince(optional.get());
+				entity = addressDao.update(entity);
+				
+			}
+	      }
+		}
+	} 
+	
+	
+	@Transactional
+	@Override
+	public Optional<Address> findById(Integer id) {
+		return Optional.ofNullable(this.addressDao.getByInt(id));
+	}
+	@Transactional
 	public Iterable<Address> findAll() {
-		return addressRepo.findAll();
+		return addressDao.getAll();
 	}
 	
-	public Optional<Address> getAddress(Long id) {
-		return addressRepo.findById(id);
+	@Transactional
+	public Address getAddress(Integer id) {
+		return addressDao.getByInt(id);
+	}
+
+	@Transactional
+	@Override
+	public void deleteByID(Integer id) {
+				
+		Address a = addressDao.getByInt(id);
+		addressDao.delete(a);
 	}
 
 }

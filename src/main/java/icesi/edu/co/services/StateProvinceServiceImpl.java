@@ -2,72 +2,111 @@ package icesi.edu.co.services;
 
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import icesi.edu.co.DAO.CountryRegionDao;
+import icesi.edu.co.DAO.StateProvinceDao;
+import icesi.edu.co.person.Countryregion;
 import icesi.edu.co.person.Stateprovince;
-import icesi.edu.co.repository.StateProvinceRepo;
 
 @Service
 public class StateProvinceServiceImpl  implements StateProvinceService{
 
-	StateProvinceRepo sRepo;
+	private StateProvinceDao stateRepo;
+	private CountryRegionDao countryRepo;
+	
+	@Autowired
+	public StateProvinceServiceImpl(StateProvinceDao stateRepo, CountryRegionDao countryRepo) {
+		this.stateRepo = stateRepo;
+		this.countryRepo = countryRepo;
+	}
+	
+	@Transactional
 	@Override
-	public void save(Stateprovince sp) {
+	public Stateprovince save(Stateprovince entity, Integer countryregionid) {
 		
 		Stateprovince aux = null;
-		boolean one = (sp.getStateprovincecode() != null) && (String.valueOf(sp.getStateprovincecode()).length() >= 4);
-		boolean two = (sp.getIsonlystateprovinceflag() != null) && (sp.getIsonlystateprovinceflag().equals("Y") || sp.getIsonlystateprovinceflag().equals("N"));
-		boolean three = (sp.getName() != null) && sp.getName().length() >= 5;
-		if(one && two && three) {
-			System.out.println("saving");
-			sRepo.save(sp);
-		}else {
-			
-			System.out.println("NOT SAVING");
+		boolean one = (entity.getStateprovincecode() != null) && (String.valueOf(entity.getStateprovincecode()).length() >= 5);
+		boolean two = (entity.getIsonlystateprovinceflag() != null) && (entity.getIsonlystateprovinceflag().equals("Y") || entity.getIsonlystateprovinceflag().equals("N"));
+		boolean three = (entity.getName() != null) && entity.getName().length() >= 5;
+		
+		if(entity.getStateprovincecode() != null && !entity.getStateprovincecode().isBlank()) {
+			int number = Integer.parseInt(entity.getStateprovincecode());
 		}
 		
-	}
-
-	@Override
-	public void update(Stateprovince sp, long id) {
-		
-		boolean one = (sp.getStateprovincecode() != null) && (String.valueOf(sp.getStateprovincecode()).length() >= 5);
-		boolean two = (sp.getIsonlystateprovinceflag() != null) && (sp.getIsonlystateprovinceflag().equals("Y") || sp.getIsonlystateprovinceflag().equals("N"));
-		boolean three = (sp.getName() != null) && sp.getName().length() >= 5;
 		if(one && two && three) {
+			Optional<Countryregion> optional = Optional.ofNullable(this.countryRepo.getByInt(countryregionid));
 			
-			Stateprovince s = sRepo.findById(id).get();
-			s.setAddresses(sp.getAddresses());
-			s.setCountryregion(sp.getCountryregion());
-			s.setIsonlystateprovinceflag(sp.getIsonlystateprovinceflag());
-			s.setModifieddate(sp.getModifieddate());
-			s.setName(sp.getName());
-			s.setRowguid(sp.getRowguid());
-			s.setStateprovincecode(s.getStateprovincecode());
-			s.setStateprovinceid(sp.getStateprovinceid());
-			s.setTerritoryid(sp.getTerritoryid());
-			sRepo.save(s);
-		}	
-	}
-
-	@Override
-	public Optional<Stateprovince> findByID(long id) {
+			if(optional.isPresent()) {
+				
+				entity.setCountryregion(optional.get());
+				aux = this.stateRepo.save(entity);
+			}else {
+				return aux = null;
+			}
+			
+		}else {
+			return aux = null;
+		}
 		
-		return sRepo.findById(id);
-	}
-
-	@Override
-	public void deleteByID(long id) {
-		sRepo.deleteById(id);
+		return aux;
 		
 	}
-
+	
+	
+	@Transactional
+	@Override
+	public Stateprovince update(Stateprovince entity, Integer countryregionid) {
+		
+		boolean one = (entity.getStateprovincecode() != null) && (String.valueOf(entity.getStateprovincecode()).length() >= 5);
+		boolean two = (entity.getIsonlystateprovinceflag() != null) && (entity.getIsonlystateprovinceflag().equals("Y") || entity.getIsonlystateprovinceflag().equals("N"));
+		boolean three = (entity.getName() != null) && entity.getName().length() >= 5;
+		
+		if(entity.getStateprovincecode() != null && !entity.getStateprovincecode().isBlank()) {
+			int number = Integer.parseInt(entity.getStateprovincecode());
+		}
+		
+		if(one && two && three) {
+		if(entity.getStateprovinceid() != 0) {
+			Optional<Stateprovince> optinalEntity = Optional.ofNullable(stateRepo.getByInt(entity.getStateprovinceid()));
+			Optional<Countryregion> optional = Optional.ofNullable(this.countryRepo.getByInt(countryregionid));
+			if(optinalEntity.isPresent() && optional.isPresent()) {
+				entity.setCountryregion(optional.get());
+				entity = this.stateRepo.update(entity);
+			}else {
+				return entity = null;
+			}
+		 }
+	   }else {
+			return entity = null;
+		}
+		
+		return entity;
+		
+	}
+	@Transactional
+	@Override
+	public Optional<Stateprovince> findById(Integer id) {
+		return Optional.ofNullable(stateRepo.getByInt(id));
+	}
+	@Transactional
 	public Iterable<Stateprovince> findAll() {
-		return sRepo.findAll();
+		return stateRepo.getAll();
+	}
+	@Transactional
+	public Stateprovince getStateProvince(Integer id) {
+		
+		return stateRepo.getByInt(id);
 	}
 
-	public Optional<Stateprovince> getStateProvince(long id) {
+	@Override
+	public void deleteByID(Integer id) {
 		
-		return sRepo.findById(id);
+		Stateprovince s = stateRepo.getByInt(id);
+		stateRepo.delete(s);
+		
 	}
 }

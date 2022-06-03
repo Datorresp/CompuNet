@@ -12,15 +12,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.client.RestTemplate;
 
-import icesi.edu.co.person.Address;
-import icesi.edu.co.person.Countryregion;
 import icesi.edu.co.person.Stateprovince;
 import icesi.edu.co.repository.AddressRepo;
 import icesi.edu.co.repository.CountryRegionRepo;
 import icesi.edu.co.repository.SalestaxRateRepo;
 import icesi.edu.co.repository.StateProvinceRepo;
 import icesi.edu.co.sales.Salestaxrate;
-import icesi.edu.co.DAO.AddressDao;
 
 @SpringBootApplication
 @EnableJpaRepositories("icesi.edu.co.repository")

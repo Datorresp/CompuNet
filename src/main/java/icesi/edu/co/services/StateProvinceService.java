@@ -10,11 +10,11 @@ import icesi.edu.co.person.Stateprovince;
 @Service
 public interface StateProvinceService {
 
-	void save(Stateprovince sp);
+	Stateprovince save(Stateprovince sp, Integer i);
 	
-	void update(Stateprovince sp, long id);
+	Stateprovince update(Stateprovince sp, Integer id);
 	
-	Optional<Stateprovince> findByID(long id);
+	Optional<Stateprovince> findById(Integer id);
 	
-	void deleteByID(long id);
+	void deleteByID(Integer id);
 }

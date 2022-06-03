@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +16,6 @@ import icesi.edu.co.person.Address;
 import icesi.edu.co.person.Stateprovince;
 import icesi.edu.co.services.AddressServiceImpl;
 import icesi.edu.co.services.CountryRegionServiceImpl;
-import icesi.edu.co.services.StateProvinceService;
 import icesi.edu.co.services.StateProvinceServiceImpl;
 
 
@@ -137,8 +135,8 @@ public class OperatorController {
 	}
 	
 	@GetMapping("/user/address/edit/{id}")
-	public String showUpdateAddress(@PathVariable("id") long id,Model model) {
-		Optional<Address> address = addressService.getAddress(id);
+	public String showUpdateAddress(@PathVariable("id") int id,Model model) {
+		Optional<Address> address = Optional.of(addressService.getAddress(id));
 		if (address == null)
 			throw new IllegalArgumentException("Invalid country Id:" + id);
 		

@@ -1,13 +1,8 @@
 package icesi.edu.co.DAO;
 
 import java.util.List;
-import java.util.Optional;
-
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,16 +26,19 @@ public class CountryRegionDao implements Dao<Countryregion>{
 	
 	@Override
 	@Transactional
-	public void save(Countryregion entity) {
+	public Countryregion save(Countryregion entity) {
 		entityManager.persist(entity);
+		return entity;
+
 		
 	}
 
 	@Override
 	@Transactional
-	public void update(Countryregion entity) {
+	public Countryregion update(Countryregion entity) {
 		entityManager.merge(entity);
-		
+		return entity;
+
 	}
 
 	@Override
