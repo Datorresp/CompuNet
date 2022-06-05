@@ -10,12 +10,13 @@ import icesi.edu.co.person.Countryregion;
 public interface CountryregionService {
 
 	
-	void save(Countryregion cr);
+	Countryregion save(Countryregion cr);
 	
-	void update(Countryregion cr, long id);
+	Countryregion update(Countryregion cr);
 	
-	Optional<Countryregion> findByID(long id);
+	Optional<Countryregion> findByID(Integer id);
 	
-	void deleteByID(long id);
+	void deleteByID(Integer id);
+
 
 }

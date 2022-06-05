@@ -1,5 +1,7 @@
 package icesi.edu.co.rest;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,77 +13,89 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import icesi.edu.co.main.BasicInfo;
+import icesi.edu.co.person.Address;
+import icesi.edu.co.person.Countryregion;
+import icesi.edu.co.person.Stateprovince;
+import icesi.edu.co.services.AddressServiceImpl;
+import icesi.edu.co.services.CountryRegionServiceImpl;
+import icesi.edu.co.services.StateProvinceServiceImpl;
+
 
 @RestController
 public class OperatorRestController {
 
-//	private DocumentDAOService documentDAOService;
-//	
-//	private TransactionHistoryDAOService transactionDAOService;
-//	
-//	@Autowired
-//	public OperatorRestController(TransactionHistoryServiceImp thServiceImpl, DocumentDAOService documentDAOService,
-//			TransactionHistoryDAOService transactionDAOService, DocumentServiceImp documentServiceImpl) {
-//		this.documentDAOService = documentDAOService;
-//		this.transactionDAOService = transactionDAOService;
-//	}
-//	
-//	
-//	//Transaccion
-//	
-//	@RequestMapping(value = "/transactions/{id}", method = RequestMethod.GET)
-//	public ResponseEntity<Transactionhistory> getTransaction(@PathVariable(value = "id") int id) {
-//		Transactionhistory p = transactionDAOService.findByID(id);
-//		return new ResponseEntity<Transactionhistory>(p, HttpStatus.OK);
-//	}
-//
-//	@SuppressWarnings({ "unchecked", "rawtypes" })
-//	@RequestMapping(value = "/transactions", method = RequestMethod.GET)
-//	public ResponseEntity<Transactionhistory> listTransaction() {
-//		List<Transactionhistory> entities = ((List<Transactionhistory>) transactionDAOService.findAll());
-//		return new ResponseEntity(entities, HttpStatus.OK);
-//	}
-//	
-//	@RequestMapping(value = "/transactions", method = RequestMethod.POST)
-//	public ResponseEntity<Transactionhistory> createProduct(@Validated(Information.class) @RequestBody Transactionhistory pe) {
-//		transactionDAOService.save(pe);
-//		return new ResponseEntity<Transactionhistory>(pe, HttpStatus.CREATED);
-//	}
-//
-//	@PutMapping("/transactions/{id}")
-//	public ResponseEntity<Transactionhistory> updatePerson(@Validated(Information.class) @RequestBody Transactionhistory pe) {
-//
-//		//productService.(pe);
-//		return ResponseEntity.ok(pe);
-//	}
-//	
-//	//DOCUMENT
-//	
-//	@RequestMapping(value = "/documents/{id}", method = RequestMethod.GET)
-//	public ResponseEntity<Document> getDocument(@PathVariable(value = "id") int id) {
-//		Document p = documentDAOService.findByOwner(id);
-//		return new ResponseEntity<Document>(p, HttpStatus.OK);
-//	}
-//
-//	@SuppressWarnings({ "unchecked", "rawtypes" })
-//	@RequestMapping(value = "/doucuments", method = RequestMethod.GET)
-//	public ResponseEntity<Document> listDocument() {
-//		List<Document> entities = ((List<Document>) documentDAOService.findAll());
-//		return new ResponseEntity(entities, HttpStatus.OK);
-//	}
-//	
-//	@RequestMapping(value = "/documents", method = RequestMethod.POST)
-//	public ResponseEntity<Document> createDocument(@Validated(Information.class) @RequestBody Document pe) {
-//		documentDAOService.save(pe);
-//		return new ResponseEntity<Document>(pe, HttpStatus.CREATED);
-//	}
-//
-//	@PutMapping("/documents/{id}")
-//	public ResponseEntity<Document> updateDocument(@Validated(Information.class) @RequestBody Document pe) {
-//
-//		//productService.(pe);
-//		return ResponseEntity.ok(pe);
-//	}
+	private StateProvinceServiceImpl stateprovinceService;
+	private CountryRegionServiceImpl countryregionService;
+	private AddressServiceImpl addressService;
+
+
+	@Autowired
+	public OperatorRestController(CountryRegionServiceImpl countryregionService,StateProvinceServiceImpl stateprovinceService,AddressServiceImpl addressService) {
+		this.countryregionService = countryregionService;
+		this.stateprovinceService = stateprovinceService;
+		this.addressService = addressService;
+	}
+
+	@RequestMapping(value="/provinces/{id}", method=RequestMethod.GET)
+	public ResponseEntity<Stateprovince> getStateprovince(@PathVariable(value="id") Integer id){
+		Stateprovince sp = stateprovinceService.findById(id).get();
+		return new ResponseEntity<Stateprovince>(sp, HttpStatus.OK);
+	}
+	
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	@RequestMapping(value="/provinces", method=RequestMethod.GET)
+	public ResponseEntity<Stateprovince> listStateprovinces(){
+		List<Stateprovince> entities = ((List<Stateprovince>) stateprovinceService.findAll());
+		return new ResponseEntity(entities, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/provinces", method =RequestMethod.POST)
+	public ResponseEntity<Stateprovince> createStateProvince(@Validated(BasicInfo.class) @RequestBody Stateprovince sp){
+		stateprovinceService.save(sp, null);
+		return new ResponseEntity<Stateprovince>(sp, HttpStatus.CREATED);
+	}
+	
+	@PutMapping("/provinces/{id}")
+	public ResponseEntity<Stateprovince> updateStateProvince(@PathVariable(value="id")Integer id, @Validated(BasicInfo.class) @RequestBody Stateprovince sp){
+		stateprovinceService.update(sp, id);
+		return ResponseEntity.ok(sp);
+	}
+	
+	@RequestMapping(value = "/addresses/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Address> getAddress(@PathVariable(value = "id") Integer id) {
+		Address a = addressService.findById(id).get();
+		return new ResponseEntity<Address>(a, HttpStatus.OK);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/addresses", method = RequestMethod.GET)
+	public ResponseEntity<Address> listEntitiesAddresses() {
+		List<Address> entities = ((List<Address>) addressService.findAll());
+		return new ResponseEntity(entities, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/addresses", method = RequestMethod.POST)
+	public ResponseEntity<Address> createEntityAddress(@Validated(BasicInfo.class) @RequestBody Address a) {
+		addressService.save(a, null);
+		return new ResponseEntity<Address>(a, HttpStatus.CREATED);
+	}
+	
+	@PutMapping("/addresses/{id}")
+	public ResponseEntity<Address> updateEntityAddress(@PathVariable(value = "id") Integer id,
+			@Validated(BasicInfo.class) @RequestBody Address a) {
+
+		addressService.update(a, id);
+		return ResponseEntity.ok(a);
+	}
+	
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/countriess", method = RequestMethod.GET)
+	public ResponseEntity<Countryregion> getAllCountryregion() {
+		List<Countryregion> countries = (List<Countryregion>) countryregionService.findAll();
+		return new ResponseEntity(countries, HttpStatus.OK);
+	}
 //	
 	
 	

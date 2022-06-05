@@ -6,16 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import icesi.edu.co.main.BasicInfo;
 import icesi.edu.co.person.Countryregion;
 import icesi.edu.co.sales.Salestaxrate;
 import icesi.edu.co.services.CountryRegionServiceImpl;
+import icesi.edu.co.services.SalesTaxRateService;
 import icesi.edu.co.services.SalesTaxRateServiceimpl;
+import icesi.edu.co.services.StateProvinceService;
 import icesi.edu.co.services.StateProvinceServiceImpl;
 
 
@@ -23,20 +27,20 @@ import icesi.edu.co.services.StateProvinceServiceImpl;
 @Controller
 public class AdminController {
 
-	private CountryRegionServiceImpl countryregionService;
-	private SalesTaxRateServiceimpl salestaxrateService;
-	private StateProvinceServiceImpl stateprovinceService;
+	private CountryRegionServiceImpl countryService;
+	private SalesTaxRateServiceimpl salesService;
+	private StateProvinceServiceImpl stateService;
 	
 	@Autowired
-	public AdminController(CountryRegionServiceImpl countryregionService,SalesTaxRateServiceimpl salestaxrateService,StateProvinceServiceImpl stateprovinceService) {
-		this.countryregionService = countryregionService;
-		this.salestaxrateService = salestaxrateService;
-		this.stateprovinceService = stateprovinceService;
+	public AdminController(CountryRegionServiceImpl countryService,SalesTaxRateServiceimpl salesService,StateProvinceServiceImpl stateService) {
+		this.countryService = countryService;
+		this.salesService = salesService;
+		this.stateService = stateService;
 	}
 	
 	@GetMapping("/admin/country/")
     public String indexCountry(Model model) {
-		model.addAttribute("countries", countryregionService.findAll());
+		model.addAttribute("countries", countryService.findAll());
         return "admin/indexCountry";
     }
 	
@@ -47,7 +51,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/admin/country/add")
-	public String saveCountry(@ModelAttribute Countryregion countryregion,BindingResult bindingResult,Model model,@RequestParam(value ="action",required = true) String action) {
+	public String saveCountry(@Validated(BasicInfo.class) @ModelAttribute Countryregion countryregion,BindingResult bindingResult,Model model,@RequestParam(value ="action",required = true) String action) {
 		
 		if (action.equals("Cancelar")) {
 			return "redirect:/admin/country/";
@@ -55,12 +59,12 @@ public class AdminController {
 		
 		if(bindingResult.hasErrors()) {
 			
-			model.addAttribute("countries", countryregionService.findAll());
+			model.addAttribute("countries", countryService.findAll());
 	        return "admin/addCountry";
 		}
 		if (!action.equalsIgnoreCase("cancel")) {
 			System.out.println("Entre");
-			countryregionService.save(countryregion);
+			countryService.save(countryregion);
 			
 		}
 		
@@ -71,7 +75,7 @@ public class AdminController {
 	
 	@GetMapping("/admin/country/edit/{id}")
 	public String showUpdateCountry(@PathVariable("id") Integer id,Model model) {
-		Optional<Countryregion> countryregion = countryregionService.findByID(id);
+		Optional<Countryregion> countryregion = countryService.findByID(id);
 		
 		if (countryregion == null)
 			throw new IllegalArgumentException("Invalid country Id:" + id);
@@ -81,7 +85,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/admin/country/edit/{id}")
-	public String updateCountry( @ModelAttribute Countryregion countryregion, BindingResult bindingResult, Model model,@PathVariable("id") Long id, @RequestParam(value = "action", required = true) String action) {
+	public String updateCountry(@Validated(BasicInfo.class) @ModelAttribute Countryregion countryregion, BindingResult bindingResult, Model model,@PathVariable("id") Integer id, @RequestParam(value = "action", required = true) String action) {
 		
 		if (action.equalsIgnoreCase("Cancelar") || action.equalsIgnoreCase("Cancel")) {
 			return "redirect:/admin/country/";
@@ -89,14 +93,12 @@ public class AdminController {
 		
 		if(bindingResult.hasErrors()) {
 			model.addAttribute("countryregion", countryregion);
-			//countryregion.setCountryregionid(id);
-			model.addAttribute("countries", countryregionService.findAll());
+			model.addAttribute("countries", countryService.findAll());
 			return "admin/updateCountry";
 		}
 		if (!action.equalsIgnoreCase("Cancelar") || !action.equalsIgnoreCase("Cancel")) {
-			//countryregion.setCountryregionid(id);
-			countryregionService.update(countryregion, id);
-			model.addAttribute("countries", countryregionService.findAll());
+			countryService.update(countryregion);
+			model.addAttribute("countries", countryService.findAll());
 		}
 		return "redirect:/admin/country/";
 	}
@@ -104,33 +106,33 @@ public class AdminController {
 	//SalesTaxrate
 	@GetMapping("/admin/sales/")
     public String indexSales(Model model) {
-		model.addAttribute("salesses", salestaxrateService.findAll());
+		model.addAttribute("salesses", salesService.findAll());
         return "admin/indexSales";
     }
 	
 	@GetMapping("/admin/sales/add")
 	public String addSales(Model model) {
 		model.addAttribute("salestaxrate",new Salestaxrate());
-		model.addAttribute("provinces", stateprovinceService.findAll());
+		model.addAttribute("provinces", stateService.findAll());
 		return "admin/addSales";
 	}
 	
 	@PostMapping("/admin/sales/add")
-	public String saveSales( @ModelAttribute Salestaxrate salestaxrate,BindingResult bindingResult,Model model,@RequestParam(value ="action",required = true) String action) {
+	public String saveSales(@Validated(BasicInfo.class) @ModelAttribute Salestaxrate salestaxrate,BindingResult bindingResult,Model model,@RequestParam(value ="action",required = true) String action) {
 		
 		if (action.equalsIgnoreCase("Cancelar") || action.equalsIgnoreCase("Cancel")) {
 			return "redirect:/admin/sales/";
 		}
 		
 		if(bindingResult.hasErrors()) {		
-			model.addAttribute("salesses", salestaxrateService.findAll());
-			model.addAttribute("provinces", stateprovinceService.findAll());
+			model.addAttribute("salesses", salesService.findAll());
+			model.addAttribute("provinces", stateService.findAll());
 	        return "admin/addSales";
 		}
 		
 		if (!action.equalsIgnoreCase("Cancelar") || !action.equalsIgnoreCase("Cancel")) {
 			
-			salestaxrateService.save(salestaxrate, 1); //CHANGEEEEEEEEEEEEEEE
+			salesService.save(salestaxrate, salestaxrate.getStateprovinceid());
 		}
 		return "redirect:/admin/sales/";
 	}
@@ -138,17 +140,17 @@ public class AdminController {
 	
 	@GetMapping("/admin/sales/edit/{id}")
 	public String showUpdateSales(@PathVariable("id") Integer id,Model model) {
-		Optional<Salestaxrate> salestaxrate = salestaxrateService.findByID(id);
+		Salestaxrate salestaxrate = salesService.getSalestaxrate(id);
 		if (salestaxrate == null)
 			throw new IllegalArgumentException("Invalid sales Id:" + id);
 		
 		model.addAttribute("salestaxrate", salestaxrate);
-		model.addAttribute("provinces", stateprovinceService.findAll());
+		model.addAttribute("provinces", stateService.findAll());
 		return "admin/updateSales";
 	}
 	
 	@PostMapping("/admin/sales/edit/{id}")
-	public String updateSales(@PathVariable("id") Integer id, @RequestParam(value = "action", required = true) String action,@ModelAttribute Salestaxrate salestaxrate, BindingResult bindingResult, Model model) {
+	public String updateSales(@PathVariable("id") Integer id, @RequestParam(value = "action", required = true) String action, @Validated(BasicInfo.class) @ModelAttribute Salestaxrate salestaxrate, BindingResult bindingResult, Model model) {
 
 		if (action.equalsIgnoreCase("Cancelar") || action.equalsIgnoreCase("Cancel") ) {
 			return "redirect:/admin/sales/";
@@ -158,18 +160,17 @@ public class AdminController {
 			
 			model.addAttribute("salestaxrate", salestaxrate);
 			salestaxrate.setSalestaxrateid(id);
-			model.addAttribute("salesses", salestaxrateService.findAll());
-			model.addAttribute("provinces", stateprovinceService.findAll());
+			model.addAttribute("salesses", salesService.findAll());
+			model.addAttribute("provinces", stateService.findAll());
 			return "admin/updateSales";
 		}
 		if (!action.equalsIgnoreCase("Cancel") || !action.equalsIgnoreCase("Cancelar")) {
 			salestaxrate.setSalestaxrateid(id);
-			salestaxrateService.update(salestaxrate,salestaxrate.getStateprovinceid());
-			model.addAttribute("salesses", salestaxrateService.findAll());
+			salesService.update(salestaxrate,salestaxrate.getStateprovinceid());
+			model.addAttribute("salesses", salesService.findAll());
 			
 		}
 		return "redirect:/admin/sales/";
 	}
-	
 	
 }
