@@ -25,11 +25,10 @@ import icesi.edu.co.services.StateProvinceServiceImpl;
 @RestController
 public class OperatorRestController {
 
-	private StateProvinceServiceImpl stateprovinceService;
 	private CountryRegionServiceImpl countryregionService;
+	private StateProvinceServiceImpl stateprovinceService;
 	private AddressServiceImpl addressService;
-
-
+	
 	@Autowired
 	public OperatorRestController(CountryRegionServiceImpl countryregionService,StateProvinceServiceImpl stateprovinceService,AddressServiceImpl addressService) {
 		this.countryregionService = countryregionService;
@@ -37,6 +36,9 @@ public class OperatorRestController {
 		this.addressService = addressService;
 	}
 
+	
+	//---------------------------------------------------------------------------------
+	
 	@RequestMapping(value="/provinces/{id}", method=RequestMethod.GET)
 	public ResponseEntity<Stateprovince> getStateprovince(@PathVariable(value="id") Integer id){
 		Stateprovince sp = stateprovinceService.findById(id).get();
@@ -52,7 +54,7 @@ public class OperatorRestController {
 	
 	@RequestMapping(value="/provinces", method =RequestMethod.POST)
 	public ResponseEntity<Stateprovince> createStateProvince(@Validated(BasicInfo.class) @RequestBody Stateprovince sp){
-		stateprovinceService.save(sp, null);
+		stateprovinceService.save(sp, 1);
 		return new ResponseEntity<Stateprovince>(sp, HttpStatus.CREATED);
 	}
 	
@@ -61,6 +63,8 @@ public class OperatorRestController {
 		stateprovinceService.update(sp, id);
 		return ResponseEntity.ok(sp);
 	}
+
+	//-----------------------------------------------------------------------------------
 	
 	@RequestMapping(value = "/addresses/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Address> getAddress(@PathVariable(value = "id") Integer id) {
@@ -77,7 +81,7 @@ public class OperatorRestController {
 	
 	@RequestMapping(value = "/addresses", method = RequestMethod.POST)
 	public ResponseEntity<Address> createEntityAddress(@Validated(BasicInfo.class) @RequestBody Address a) {
-		addressService.save(a, null);
+		addressService.save(a, 1);
 		return new ResponseEntity<Address>(a, HttpStatus.CREATED);
 	}
 	
@@ -90,13 +94,13 @@ public class OperatorRestController {
 	}
 	
 
+	//-----------------------------------------------------------------------------------------------
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@RequestMapping(value = "/countriess", method = RequestMethod.GET)
+	@RequestMapping(value = "/countries", method = RequestMethod.GET)
 	public ResponseEntity<Countryregion> getAllCountryregion() {
 		List<Countryregion> countries = (List<Countryregion>) countryregionService.findAll();
 		return new ResponseEntity(countries, HttpStatus.OK);
 	}
-//	
-	
 	
 }
