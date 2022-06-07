@@ -13,10 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 
-import icesi.edu.co.DAOService.AddressDAOService;
-import icesi.edu.co.DAOService.CountryRegionDAOService;
-import icesi.edu.co.DAOService.SalesTaxRateDAOService;
-import icesi.edu.co.DAOService.StateProvinceDAOService;
 import icesi.edu.co.main.BasicInfo;
 import icesi.edu.co.person.Countryregion;
 import icesi.edu.co.person.Person;

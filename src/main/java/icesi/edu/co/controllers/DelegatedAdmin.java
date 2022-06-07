@@ -32,7 +32,7 @@ public class DelegatedAdmin {
 		return p;
 	}
 	
-	public Iterable<Countryregion> getAllCountry(){
+	public Iterable<Countryregion> getAllCountries(){
 		
 		String url = "http://localhost:8080/country";
 		Countryregion[] p = restTemplate.getForObject(url, Countryregion[].class);
@@ -114,7 +114,7 @@ public class DelegatedAdmin {
 	}
 	
 	
-	public Iterable<Person> getAllPerson(){
+	public Iterable<Person> getAllPersons(){
 		String url = "http://localhost:8080/persons";
 		Person[] p = restTemplate.getForObject(url, Person[].class);
 		return Arrays.asList(p);
