@@ -51,7 +51,7 @@ public class TallerCompunetApplication {
 			Stateprovince state = new Stateprovince();
 			state.setStateprovincecode("123");
 			state.setIsonlystateprovinceflag("Y");
-			state.setName("CUNDINAMARCA");
+			state.setName("Valle");
 			state.setCountryregion(cr);
 			spr.save(state);
 			
@@ -59,7 +59,7 @@ public class TallerCompunetApplication {
 			Address adres = new Address();
 			adres.setAddressline1("cll 14");
 			adres.setAddressline2("# 83 - 50");
-			adres.setCity("Bogota");
+			adres.setCity("Cali");
 			adres.setPostalcode("1234");
 			adres.setStateprovince(state);
 			
@@ -67,20 +67,21 @@ public class TallerCompunetApplication {
 			
 			
 			Salestaxrate sales = new Salestaxrate();
-			sales.setTaxrate(new BigDecimal("124567890.0987654321"));
-			sales.setName("cinco");
+			sales.setTaxrate(new BigDecimal("123.123456"));
+			sales.setName("venta");
 			sales.setStateprovince(state);
 			srp.save(sales);
 			
 			Person persona = new Person();
-			persona.setFirstname("Juan Jose");
-			persona.setLastname("Restrepo");
+			persona.setFirstname("Diego A");
+			persona.setLastname("Torres");
 			pr.save(persona);
 			
-//			
+			
 //			Employee e = new Employee();
-//			e.setNationalidnumber("1005976323");
-//			e.setJobtitle("Ing de sistemas");
+////			e.setNationalidnumber("123456");
+////			e.setJobtitle("CEO");
+////			e.setGender("Man");
 //			e.setPerson(persona);
 //			ep.save(e);
 			

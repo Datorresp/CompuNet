@@ -18,8 +18,8 @@ public class CountryRegionServiceImpl implements CountryregionService{
 	private CountryRegionDao countryrepo;
 
 	@Autowired
-	public CountryRegionServiceImpl(CountryRegionDao countryregionDAO) {
-		this.countryrepo = countryregionDAO;
+	public CountryRegionServiceImpl(CountryRegionDao countryService) {
+		this.countryrepo = countryService;
 	}
 	
 	@Transactional
