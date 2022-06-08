@@ -189,6 +189,9 @@ public class DelegatedAdmin {
 	}
 	
 
+	public void setRestTemplate(RestTemplate r) {
+		this.restTemplate = r;
+	}
 	
 	
 	

@@ -102,4 +102,8 @@ public class DelegatedUser {
 		Countryregion[] cr = restTemplate.getForObject(url, Countryregion[].class);
 		return Arrays.asList(cr);
 	}
+	
+	public void setRestTemplate(RestTemplate r) {
+		this.restTemplate = r;
+	}
 }
