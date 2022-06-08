@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,13 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import icesi.edu.co.hr.Employee;
 import icesi.edu.co.main.BasicInfo;
+import icesi.edu.co.person.Address;
 import icesi.edu.co.person.Countryregion;
 import icesi.edu.co.person.Person;
 import icesi.edu.co.person.Stateprovince;
 import icesi.edu.co.sales.Salestaxrate;
+import icesi.edu.co.services.AddressServiceImpl;
 import icesi.edu.co.services.CountryRegionServiceImpl;
+import icesi.edu.co.services.EmployeeServiceImpl;
 import icesi.edu.co.services.PersonServiceImpl;
 import icesi.edu.co.services.SalesTaxRateServiceimpl;
 import icesi.edu.co.services.StateProvinceServiceImpl;
@@ -31,15 +35,23 @@ public class AdminRestController {
 	private SalesTaxRateServiceimpl salestaxrateService;
 	private StateProvinceServiceImpl stateprovinceService;
 	private PersonServiceImpl personService;
+	private EmployeeServiceImpl employeeService;
+	private AddressServiceImpl addressService;
 	
 	@Autowired
-	public AdminRestController(CountryRegionServiceImpl countryregionService, SalesTaxRateServiceimpl salestaxrateService, StateProvinceServiceImpl stateprovinceService,PersonServiceImpl personService) {
+	public AdminRestController(CountryRegionServiceImpl countryregionService, SalesTaxRateServiceimpl salestaxrateService, StateProvinceServiceImpl stateprovinceService,PersonServiceImpl personService, EmployeeServiceImpl employeeService, AddressServiceImpl addressService) {
 		this.countryregionService = countryregionService;
 		this.salestaxrateService = salestaxrateService;
 		this.stateprovinceService = stateprovinceService;
 		this.personService = personService;
+		this.employeeService = employeeService;
+		this.addressService = addressService;
 	}
 	
+
+	  //////////////////////////////////////////////////////////////////////////////////////
+	 ////////////////////////////////Country Region////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
 
 	@RequestMapping(value = "/countries/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Countryregion> getCountryregion(@PathVariable(value = "id") Integer id){
@@ -67,9 +79,12 @@ public class AdminRestController {
 		
 		return ResponseEntity.ok(cr);
 	}
- 
 	
-	//--------------------------------------------------------------------------------------------------
+	
+	
+	  //////////////////////////////////////////////////////////////////////////////////////
+	 ////////////////////////////////Sales Tax Rate////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
 	
 	@RequestMapping(value = "/sales/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Salestaxrate> getSalestaxrate(@PathVariable(value = "id") Integer id){
@@ -101,8 +116,9 @@ public class AdminRestController {
 		return ResponseEntity.ok(sr);
 	}
 	
-
-	//----------------------------------------------------------------------------------------------
+	  //////////////////////////////////////////////////////////////////////////////////////
+	 ////////////////////////////////State Province////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
 	
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -111,8 +127,11 @@ public class AdminRestController {
 		List<Stateprovince> stateprovinces = (List<Stateprovince>) stateprovinceService.findAll();
 		return new ResponseEntity(stateprovinces, HttpStatus.OK);
 	}
-
-	//----------------------------------------------------------------------------------------------
+	
+	  //////////////////////////////////////////////////////////////////////////////////////
+	 ////////////////////////////////Person////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
+	
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value = "/persons", method = RequestMethod.GET)
@@ -121,12 +140,83 @@ public class AdminRestController {
 		return new ResponseEntity(persons, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/persons/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Person> getPerson(@PathVariable(value = "id") Integer id){
+		Person pr = personService.findById(id);
+		return new ResponseEntity<Person>(pr, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/persons", method = RequestMethod.POST)
 	public ResponseEntity<Person> createPerson(@Validated(BasicInfo.class) @RequestBody Person person){
 		
 		personService.save(person);
 		
 		return new ResponseEntity<Person>(person, HttpStatus.OK);
+	}
+	
+	@DeleteMapping(value= "/persons/{id}")
+	public void deletePerson(@PathVariable(value="id") Integer id) {
+		
+		Person p = personService.findById(id);
+		if(p != null) {
+			personService.delete(p);	
+		}
+		
+	}
+
+	
+	
+	  //////////////////////////////////////////////////////////////////////////////////////
+	 ////////////////////////////////Employee//////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
+	
+	@RequestMapping(value = "/employees/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Employee> getEmployee(@PathVariable(value = "id") Integer id) {
+		
+		Employee e = employeeService.findByID(id).get();
+		return new ResponseEntity<Employee>(e, HttpStatus.OK);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/employees", method = RequestMethod.GET)
+	public ResponseEntity<Employee> listEmployees() {
+		
+		List<Employee> employees = ((List<Employee>) employeeService.findAll());
+		return new ResponseEntity(employees, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/employees", method = RequestMethod.POST)
+	public ResponseEntity<Employee> createEmployee(@Validated(BasicInfo.class) @RequestBody Employee e) {
+		
+		employeeService.save(e);
+		return new ResponseEntity<Employee>(e, HttpStatus.CREATED);
+	}
+
+	@PutMapping("/employees/{id}")
+	public ResponseEntity<Employee> updateEmployee(@PathVariable(value = "id") Integer id,
+			@Validated(BasicInfo.class) @RequestBody Employee e) {
+
+		employeeService.update(e, 1);
+		return ResponseEntity.ok(e);
+	}
+	
+
+	@DeleteMapping(value= "/employees/{id}")
+	public void deleteEmployee(@PathVariable(value="id") Integer id) {
+		
+		Employee e = employeeService.findByID(id).get();
+		if(e != null) {
+			employeeService.deleteByID(id);
+		}
+		
+	}
+	
+	
+	//ESPECIAL QUERY
+	
+	@RequestMapping(value = "/query", method = RequestMethod.GET)
+	public List<Address> addressSpecialQuery() {
+		return addressService.addresswithSpecialQuery("Cali");
 	}
 	
 	

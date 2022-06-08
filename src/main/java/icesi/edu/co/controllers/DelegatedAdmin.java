@@ -13,8 +13,10 @@ import org.springframework.web.client.RestTemplate;
 
 import icesi.edu.co.hr.Employee;
 import icesi.edu.co.main.BasicInfo;
+import icesi.edu.co.person.Address;
 import icesi.edu.co.person.Countryregion;
 import icesi.edu.co.person.Person;
+import icesi.edu.co.person.Stateprovince;
 import icesi.edu.co.sales.Salestaxrate;
 
 
@@ -24,6 +26,14 @@ public class DelegatedAdmin {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	
+	public Iterable<Address> specialQuery() {
+		
+		String url = "http://localhost:8080/query/";
+		
+		Address[] ads = restTemplate.getForObject(url, Address[].class);
+		return Arrays.asList(ads);
+	}
 	
 	  //////////////////////////////////////////////////////////////////////////////////////
 	 ////////////////////////////////Country Region////////////////////////////////////////
@@ -114,6 +124,7 @@ public class DelegatedAdmin {
 	//////////////////////////////////////////////////////////////////////////////////////
 	
 	public Employee getEmployee(Integer id) {
+		
 		String url = "http://localhost:8080/employees/" + id;
 		Employee p = restTemplate.getForObject(url, Employee.class);
 		return p;
@@ -121,29 +132,32 @@ public class DelegatedAdmin {
 	
 	
 	public Iterable<Employee> getAllEmployee(){
+		
 		String url = "http://localhost:8080/employees";
 		Employee[] p = restTemplate.getForObject(url, Employee[].class);
 		return Arrays.asList(p);
 	}
 	
 	
-	public String createEmploye(Employee cr) {
+	public String createEmploye(Employee e) {
+		
 		String url = "http://localhost:8080/employees/";
 		
 		HttpHeaders headers = new  HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		HttpEntity<Employee> entity = new HttpEntity<Employee>(cr, headers);
+		HttpEntity<Employee> entity = new HttpEntity<Employee>(e, headers);
 		
 		return restTemplate.exchange(url, HttpMethod.POST, entity, String.class).getBody();
 		
 	}
 	
-	public String updateEmployee(long id, @Validated(BasicInfo.class) Employee cr) {
+	public String updateEmployee(long id, @Validated(BasicInfo.class) Employee e) {
+		
 		String url = "http://localhost:8080/employees/";
 		
 		HttpHeaders headers = new  HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		HttpEntity<Employee> entity = new HttpEntity<Employee>(cr, headers);
+		HttpEntity<Employee> entity = new HttpEntity<Employee>(e, headers);
 		
 		return restTemplate.exchange(url + id, HttpMethod.PUT, entity, String.class).getBody();
 	}
@@ -167,23 +181,23 @@ public class DelegatedAdmin {
 	}
 	
 	
-	public String createPerson(Person cr) {
+	public String createPerson(Person p) {
 		String url = "http://localhost:8080/persons/";
 		
 		HttpHeaders headers = new  HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		HttpEntity<Person> entity = new HttpEntity<Person>(cr, headers);
+		HttpEntity<Person> entity = new HttpEntity<Person>(p, headers);
 		
 		return restTemplate.exchange(url, HttpMethod.POST, entity, String.class).getBody();
 		
 	}
 	
-	public String updatePerson(long id, @Validated(BasicInfo.class) Person cr) {
+	public String updatePerson(long id, @Validated(BasicInfo.class) Person p) {
 		String url = "http://localhost:8080/persons/";
 		
 		HttpHeaders headers = new  HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		HttpEntity<Person> entity = new HttpEntity<Person>(cr, headers);
+		HttpEntity<Person> entity = new HttpEntity<Person>(p, headers);
 		
 		return restTemplate.exchange(url + id, HttpMethod.PUT, entity, String.class).getBody();
 	}
@@ -193,6 +207,22 @@ public class DelegatedAdmin {
 		this.restTemplate = r;
 	}
 	
+	//STATEPROVINCE
+	//------------------------------------------------------------------------
+	public Iterable<Stateprovince> getAllStateprovince(){
+			
+		String url = "http://localhost:8080/states";
+		Stateprovince[] sp = restTemplate.getForObject(url, Stateprovince[].class);
+		return Arrays.asList(sp);
+	}
 	
+	public Iterable<Stateprovince> findAll() {
+
+		Stateprovince[] sps = restTemplate.getForObject("http://localhost:8080/states", Stateprovince[].class);
+		return Arrays.asList(sps);
+	}
+
+
+
 	
 }

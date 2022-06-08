@@ -19,7 +19,7 @@
 	<div th:switch="${stateprovince}" class="container my-5">
 		<div class="row">
 			<div class="col-md-10">
-				<h2 th:case="null">Mr. Mcqueen no hay nadie!</h2>
+				<h2 th:case="null"></h2>
 				<div th:case="*">
 					<h2 class="my-5">Estado-Provincia</h2>
 					<table class="table table-striped table-responsive-md">
@@ -42,7 +42,7 @@
 								<td th:text="${province.name}"></td>
 								<td th:text="${province.countryregion.name}"></td>
 								<td><a th:href="@{/user/province/edit/{id}(id=${province.stateprovinceid})}"
-                                    class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>
+                                    class="btn btn-primary"><i class="fas fa-pencil-alt"></i></a></td>
                                 
 							</tr>
 						</tbody>
@@ -50,7 +50,7 @@
 				</div>
 				<p class="my-5">
 					<a href="/user/province/add" class="btn btn-primary"><i
-						class="fas fa-user-plus ml-2"></i></a>
+						class="fas fa-plus"></i></a>
 				</p>
 			</div>
 		</div>

@@ -1,5 +1,6 @@
 package icesi.edu.co.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -11,16 +12,14 @@ import icesi.edu.co.DAO.AddressDao;
 import icesi.edu.co.DAO.StateProvinceDao;
 import icesi.edu.co.person.Address;
 import icesi.edu.co.person.Stateprovince;
-import icesi.edu.co.repository.AddressRepo;
-import icesi.edu.co.repository.StateProvinceRepo;
 
 @Service	
 public class AddressServiceImpl implements AddressService{
 
 	private AddressDao addressDao;
 	private StateProvinceDao stateprovinceDao;
+
 	
-	//Constructor
 	@Autowired
 	public AddressServiceImpl(AddressDao addressDao, StateProvinceDao stateprovinceDao) {
 		this.addressDao = addressDao;
@@ -107,6 +106,11 @@ public class AddressServiceImpl implements AddressService{
 				
 		Address a = addressDao.getByInt(id);
 		addressDao.delete(a);
+	}
+	
+	@Transactional
+	public List<Address> addresswithSpecialQuery(String city){
+		return addressDao.getAddressByCity(city);
 	}
 
 }

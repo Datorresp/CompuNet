@@ -70,6 +70,7 @@ public class AddressDao implements Dao<Address> {
 	       String jpql = "SELECT a FROM Address a WHERE a.city = '" + city + "'";
 	       return entityManager.createQuery(jpql,Address.class).getResultList();
 	}
+	
 
 
 }

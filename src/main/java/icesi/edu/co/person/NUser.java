@@ -23,6 +23,7 @@ public class NUser implements UserDetails{
 	@Id
 	private String username;
 	
+	@SuppressWarnings("unused")
 	private String password;
 	
 	private String role;
@@ -68,6 +69,10 @@ public class NUser implements UserDetails{
 	public String getUsername() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 }

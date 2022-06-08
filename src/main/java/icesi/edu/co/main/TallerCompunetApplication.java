@@ -78,12 +78,12 @@ public class TallerCompunetApplication {
 			pr.save(persona);
 			
 			
-//			Employee e = new Employee();
-////			e.setNationalidnumber("123456");
-////			e.setJobtitle("CEO");
-////			e.setGender("Man");
-//			e.setPerson(persona);
-//			ep.save(e);
+			Employee e = new Employee();
+			e.setNationalidnumber("123456");
+			e.setJobtitle("CEO");
+			e.setGender("Man");
+			//e.setPerson(persona);
+			ep.save(e);
 			
 		};
 	}

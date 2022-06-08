@@ -96,6 +96,12 @@ public class AdminController {
 		return "redirect:/admin/country/";
 	}
 	
+	@GetMapping("/admin/addresses/")
+	public String indexSpecialqueries(Model model) {
+		model.addAttribute("addresses", da.specialQuery());
+		return "admin/queries";
+	}
+	
 	//SalesTaxrate
 	@GetMapping("/admin/sales/")
     public String indexSales(Model model) {
@@ -106,7 +112,7 @@ public class AdminController {
 	@GetMapping("/admin/sales/add")
 	public String addSales(Model model) {
 		model.addAttribute("salestaxrate",new Salestaxrate());
-//		model.addAttribute("provinces", da.findAll());
+		model.addAttribute("provinces", da.getAllStateprovince());
 		return "admin/addSales";
 	}
 	
@@ -119,7 +125,7 @@ public class AdminController {
 		
 		if(bindingResult.hasErrors()) {		
 			model.addAttribute("sales", da.getAllSales());
-//			model.addAttribute("provinces", da.findAll());
+			model.addAttribute("provinces", da.getAllStateprovince());
 	        return "admin/addSales";
 		}
 		
@@ -138,7 +144,7 @@ public class AdminController {
 			throw new IllegalArgumentException("Invalid sales Id:" + id);
 		
 		model.addAttribute("salestaxrate", salestaxrate);
-//		model.addAttribute("provinces", da.g());
+		model.addAttribute("provinces", da.getAllStateprovince());
 		return "admin/updateSales";
 	}
 	
@@ -154,7 +160,7 @@ public class AdminController {
 			model.addAttribute("salestaxrate", salestaxrate);
 			salestaxrate.setSalestaxrateid(id);
 			model.addAttribute("salesses", da.getAllSales());
-//			model.addAttribute("provinces", da.getAllStateprovince());
+			model.addAttribute("provinces", da.getAllStateprovince());
 			return "admin/updateSales";
 		}
 		if (!action.equalsIgnoreCase("Cancel") || !action.equalsIgnoreCase("Cancelar")) {
@@ -276,10 +282,12 @@ public class AdminController {
 	
 	@GetMapping("/admin/employee/edit/{id}")
 	public String showUpdateEmployee(@PathVariable("id") Integer id,Model model) {
-		Employee employeee = da.getEmployee(id);
-		if (employeee == null)
-			throw new IllegalArgumentException("Invalid employee Id:" + id);
 		
+		Employee employeee = da.getEmployee(id);
+		
+		if (employeee == null) {
+			throw new IllegalArgumentException("Invalid employee Id:" + id);
+		}
 		model.addAttribute("employee", employeee);
 		model.addAttribute("persons", da.getAllPersons());
 		return "admin/updateEmployee";
@@ -289,6 +297,7 @@ public class AdminController {
 	public String updateEmployee(@PathVariable("id") Integer id, @RequestParam(value = "action", required = true) String action, @Validated(BasicInfo.class) @ModelAttribute Employee employee, BindingResult bindingResult, Model model) {
 
 		if (action.equalsIgnoreCase("Cancelar") || action.equalsIgnoreCase("Cancel") ) {
+			
 			return "redirect:/admin/employee/";
 		}
 		
@@ -301,6 +310,7 @@ public class AdminController {
 			return "admin/updateEmployee";
 		}
 		if (!action.equalsIgnoreCase("Cancel") || !action.equalsIgnoreCase("Cancelar")) {
+			
 			employee.setBusinessentityid(id);
 			da.updateEmployee(employee.getBusinessentityid(), employee);
 			model.addAttribute("employees", da.getAllEmployee());

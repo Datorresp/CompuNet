@@ -19,11 +19,11 @@
 	<div th:switch="${apps}" class="container my-5">
 		<div class="row">
 			<div class="col-md-6">
-				<h2 th:case="null">Bienvenido Usuario</h2>
+				<h2 th:case="null">Bienvenido Usuario <i class="fas fa-hammer"></i></h2>
 
-				<p><a href="/user/address/"><i class="fas fa-building ml-2"></i> Gestionar Direcciones</a></p>
-				<p><a href="/user/province/"><i class="fas fa-calendar ml-2"></i> Gestionar Estados Provincias</a></p>
-				<p><a href="/logout"><i class="fa fa-window-close ml-2" aria-hidden="true"></i> Logout</a></p>
+				<p><a href="/user/address/"><i class="fas fa-building"></i>Gestionar Direcciones</a></p>
+				<p><a href="/user/province/"><i class="fas fa-city"></i> Gestionar Estados Provincias</a></p>
+				<p><a href="/logout"><i class="fas fa-door-open"></i> Logout</a></p>
 			</div>
 		</div>
 	</div>
