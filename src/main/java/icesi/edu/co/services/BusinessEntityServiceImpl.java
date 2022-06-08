@@ -19,7 +19,7 @@ public class BusinessEntityServiceImpl implements BusinessEntityService{
 	}
 
 	@Override
-	public void update(Businessentity be, long id) {
+	public void update(Businessentity be, Integer id) {
 		
 		Businessentity be1 = beRepo.findById(id).get();
 		be1.setBusinessentityaddresses(be.getBusinessentityaddresses());
@@ -32,13 +32,13 @@ public class BusinessEntityServiceImpl implements BusinessEntityService{
 	}
 
 	@Override
-	public Optional<Businessentity> findByID(long id) {
+	public Optional<Businessentity> findByID(Integer id) {
 	
 		return beRepo.findById(id);
 	}
 
 	@Override
-	public void deleteByID(long id) {
+	public void deleteByID(Integer id) {
 		beRepo.deleteById(id);
 		
 	}

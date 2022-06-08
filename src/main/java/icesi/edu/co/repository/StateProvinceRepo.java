@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import icesi.edu.co.person.Stateprovince;
 
 @Repository
-public interface StateProvinceRepo extends CrudRepository<Stateprovince, Long>{
+public interface StateProvinceRepo extends CrudRepository<Stateprovince, Integer>{
 }

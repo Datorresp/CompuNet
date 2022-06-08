@@ -7,6 +7,6 @@ import icesi.edu.co.hr.Employee;
 
 @Repository
 
-public interface EmployeeRepo extends CrudRepository<Employee, Long>{
+public interface EmployeeRepo extends CrudRepository<Employee, Integer>{
 
 }

@@ -13,6 +13,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import icesi.edu.co.main.BasicInfo;
+
 
 /**
  * The persistent class for the stateprovince database table.
@@ -26,25 +34,31 @@ public class Stateprovince implements Serializable {
 	@Id
 	@SequenceGenerator(name = "STATEPROVINCE_STATEPROVINCEID_GENERATOR", allocationSize = 1, sequenceName = "STATEPROVINCE_SEQ")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "STATEPROVINCE_STATEPROVINCEID_GENERATOR")
-	private int stateprovinceid;
-
+	private Integer stateprovinceid;
+	
+	@NotBlank(groups = BasicInfo.class)
 	private String isonlystateprovinceflag;
 
 	private Timestamp modifieddate;
-
+	
+	@Size(min=5,groups = BasicInfo.class)
 	private String name;
 
 	private Integer rowguid;
-
+	
+	@NotNull(groups = BasicInfo.class)
+	@Size(min=5, max=5,groups = BasicInfo.class)
 	private String stateprovincecode;
 
 	private Integer territoryid;
 
 	// bi-directional many-to-one association to Address
 	@OneToMany(mappedBy = "stateprovince")
+	@JsonIgnore
 	private List<Address> addresses;
 
 	// bi-directional many-to-one association to Countryregion
+	@NotNull(groups = BasicInfo.class)
 	@ManyToOne
 	@JoinColumn(name = "countryregioncode")
 	private Countryregion countryregion;
@@ -87,7 +101,7 @@ public class Stateprovince implements Serializable {
 		return this.stateprovincecode;
 	}
 
-	public int getStateprovinceid() {
+	public Integer getStateprovinceid() {
 		return this.stateprovinceid;
 	}
 
@@ -130,12 +144,13 @@ public class Stateprovince implements Serializable {
 		this.stateprovincecode = stateprovincecode;
 	}
 
-	public void setStateprovinceid(int l) {
-		this.stateprovinceid = l;
+	public void setStateprovinceid(Integer stateprovinceid) {
+		this.stateprovinceid = stateprovinceid;
 	}
 
 	public void setTerritoryid(Integer territoryid) {
 		this.territoryid = territoryid;
 	}
+
 
 }

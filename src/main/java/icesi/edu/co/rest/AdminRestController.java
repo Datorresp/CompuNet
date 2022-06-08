@@ -31,9 +31,9 @@ public class AdminRestController {
 	private SalesTaxRateServiceimpl salestaxrateService;
 	private StateProvinceServiceImpl stateprovinceService;
 	private PersonServiceImpl personService;
+	
 	@Autowired
-	public AdminRestController(CountryRegionServiceImpl countryregionService, SalesTaxRateServiceimpl salestaxrateService,
-			StateProvinceServiceImpl stateprovinceService,PersonServiceImpl personService) {
+	public AdminRestController(CountryRegionServiceImpl countryregionService, SalesTaxRateServiceimpl salestaxrateService, StateProvinceServiceImpl stateprovinceService,PersonServiceImpl personService) {
 		this.countryregionService = countryregionService;
 		this.salestaxrateService = salestaxrateService;
 		this.stateprovinceService = stateprovinceService;
@@ -96,7 +96,7 @@ public class AdminRestController {
 	@PutMapping("/sales/{id}")
 	public ResponseEntity<Salestaxrate> updateSalestaxrate(@Validated(BasicInfo.class) @RequestBody Salestaxrate sr){
 		
-		salestaxrateService.update(sr, sr.getStateprovinceid());
+		salestaxrateService.update(sr, sr.getStateprovince().getStateprovinceid());
 		
 		return ResponseEntity.ok(sr);
 	}

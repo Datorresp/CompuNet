@@ -11,9 +11,9 @@ public interface EmployeeService {
 
 	void save(Employee e);
 	
-	void update(Employee e, long id);
+	void update(Employee e, Integer id);
 	
-	Optional<Employee> findByID(long id);
+	Optional<Employee> findByID(Integer id);
 	
-	void deleteByID(long id);
+	void deleteByID(Integer id);
 }

@@ -5,17 +5,19 @@ import java.util.ArrayList;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import icesi.edu.co.DAOService.PersonDAO;
+import icesi.edu.co.DAOService.PersonDAOService;
 import icesi.edu.co.person.Person;
 
+@Service
 public class PersonServiceImpl {
 
 	
-	private PersonDAO personDAO;
+	private PersonDAOService personDAO;
 
 	@Autowired
-	public PersonServiceImpl(PersonDAO personDAO) {
+	public PersonServiceImpl(PersonDAOService personDAO) {
 		this.personDAO = personDAO;
 	}
 	

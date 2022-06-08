@@ -97,7 +97,7 @@ public class OperatorRestController {
 	//-----------------------------------------------------------------------------------------------
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@RequestMapping(value = "/countries", method = RequestMethod.GET)
+	@RequestMapping(value = "/countriess", method = RequestMethod.GET)
 	public ResponseEntity<Countryregion> getAllCountryregion() {
 		List<Countryregion> countries = (List<Countryregion>) countryregionService.findAll();
 		return new ResponseEntity(countries, HttpStatus.OK);

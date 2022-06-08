@@ -11,9 +11,9 @@ public interface BusinessEntityService {
 
 	void save(Businessentity be);
 	
-	void update(Businessentity be, long id);
+	void update(Businessentity be, Integer id);
 	
-	Optional<Businessentity> findByID(long id);
+	Optional<Businessentity> findByID(Integer id);
 	
-	void deleteByID(long id);
+	void deleteByID(Integer id);
 }

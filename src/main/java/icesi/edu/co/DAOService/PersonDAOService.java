@@ -7,17 +7,19 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import icesi.edu.co.DAO.Dao;
 import icesi.edu.co.person.Person;
 
-public class PersonDAO implements  Dao<Person>{
+@Service
+public class PersonDAOService implements  Dao<Person>{
 
 	@PersistenceContext
 	private EntityManager entityManager;
 
 	@Autowired
-	public PersonDAO(EntityManager entityManager) {
+	public PersonDAOService(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
 	

@@ -1,5 +1,5 @@
 package icesi.edu.co.main;
 
-public class BasicInfo {
+public interface BasicInfo {
 
 }

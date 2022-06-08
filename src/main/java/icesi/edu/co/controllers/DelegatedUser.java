@@ -7,6 +7,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,13 +16,17 @@ import icesi.edu.co.person.Address;
 import icesi.edu.co.person.Countryregion;
 import icesi.edu.co.person.Stateprovince;
 
+
+@Component
 public class DelegatedUser {
 
 	@Autowired
 	private RestTemplate restTemplate;
 	
-	// State province
-	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	  //////////////////////////////////////////////////////////////////////////////////////
+	 ////////////////////////////////State Province////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
 	
 	public Stateprovince getStateprovince(Integer id){
 		String url = "http://localhost:8080/provinces/"+id;
@@ -54,7 +59,10 @@ public class DelegatedUser {
 	}
 	
 
-	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	  //////////////////////////////////////////////////////////////////////////////////////
+	 ////////////////////////////////Address///////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
 	
 	public Address getAddress(Integer id){
 		String url = "http://localhost:8080/addresses/"+id;
@@ -85,8 +93,10 @@ public class DelegatedUser {
 	         "http://localhost:8080/addresses/"+id, HttpMethod.PUT, entity, String.class).getBody();
 	}
 	
-	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+	  //////////////////////////////////////////////////////////////////////////////////////
+	 ////////////////////////////////Country Region////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
+	
 	public Iterable<Countryregion> getAllCountryregion(){
 		String url = "http://localhost:8080/countries";
 		Countryregion[] cr = restTemplate.getForObject(url, Countryregion[].class);

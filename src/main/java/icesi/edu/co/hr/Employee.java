@@ -4,17 +4,18 @@ package icesi.edu.co.hr;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+
+import icesi.edu.co.main.BasicInfo;
+import icesi.edu.co.person.Person;
 
 /**
  * The persistent class for the employee database table.
@@ -59,42 +60,14 @@ public class Employee implements Serializable {
 	private Integer sickleavehours;
 
 	private Integer vacationhours;
+	
+	@NotNull(groups = BasicInfo.class)
+	private Person person;
 
-	// bi-directional many-to-one association to Employeedepartmenthistory
-	@OneToMany(mappedBy = "employee")
-	private List<Employeedepartmenthistory> employeedepartmenthistories;
-
-	// bi-directional many-to-one association to Employeepayhistory
-	@OneToMany(mappedBy = "employee")
-	private List<Employeepayhistory> employeepayhistories;
-
-	// bi-directional many-to-one association to Jobcandidate
-	@OneToMany(mappedBy = "employee")
-	private List<Jobcandidate> jobcandidates;
 
 	public Employee() {
 	}
 
-	public Employeedepartmenthistory addEmployeedepartmenthistory(Employeedepartmenthistory employeedepartmenthistory) {
-		getEmployeedepartmenthistories().add(employeedepartmenthistory);
-		employeedepartmenthistory.setEmployee(this);
-
-		return employeedepartmenthistory;
-	}
-
-	public Employeepayhistory addEmployeepayhistory(Employeepayhistory employeepayhistory) {
-		getEmployeepayhistories().add(employeepayhistory);
-		employeepayhistory.setEmployee(this);
-
-		return employeepayhistory;
-	}
-
-	public Jobcandidate addJobcandidate(Jobcandidate jobcandidate) {
-		getJobcandidates().add(jobcandidate);
-		jobcandidate.setEmployee(this);
-
-		return jobcandidate;
-	}
 
 	public Date getBirthdate() {
 		return this.birthdate;
@@ -108,13 +81,6 @@ public class Employee implements Serializable {
 		return this.currentflag;
 	}
 
-	public List<Employeedepartmenthistory> getEmployeedepartmenthistories() {
-		return this.employeedepartmenthistories;
-	}
-
-	public List<Employeepayhistory> getEmployeepayhistories() {
-		return this.employeepayhistories;
-	}
 
 	public String getGender() {
 		return this.gender;
@@ -122,10 +88,6 @@ public class Employee implements Serializable {
 
 	public Date getHiredate() {
 		return this.hiredate;
-	}
-
-	public List<Jobcandidate> getJobcandidates() {
-		return this.jobcandidates;
 	}
 
 	public String getJobtitle() {
@@ -168,27 +130,6 @@ public class Employee implements Serializable {
 		return this.vacationhours;
 	}
 
-	public Employeedepartmenthistory removeEmployeedepartmenthistory(
-			Employeedepartmenthistory employeedepartmenthistory) {
-		getEmployeedepartmenthistories().remove(employeedepartmenthistory);
-		employeedepartmenthistory.setEmployee(null);
-
-		return employeedepartmenthistory;
-	}
-
-	public Employeepayhistory removeEmployeepayhistory(Employeepayhistory employeepayhistory) {
-		getEmployeepayhistories().remove(employeepayhistory);
-		employeepayhistory.setEmployee(null);
-
-		return employeepayhistory;
-	}
-
-	public Jobcandidate removeJobcandidate(Jobcandidate jobcandidate) {
-		getJobcandidates().remove(jobcandidate);
-		jobcandidate.setEmployee(null);
-
-		return jobcandidate;
-	}
 
 	public void setBirthdate(Date birthdate) {
 		this.birthdate = birthdate;
@@ -201,25 +142,13 @@ public class Employee implements Serializable {
 	public void setCurrentflag(String currentflag) {
 		this.currentflag = currentflag;
 	}
-
-	public void setEmployeedepartmenthistories(List<Employeedepartmenthistory> employeedepartmenthistories) {
-		this.employeedepartmenthistories = employeedepartmenthistories;
-	}
-
-	public void setEmployeepayhistories(List<Employeepayhistory> employeepayhistories) {
-		this.employeepayhistories = employeepayhistories;
-	}
-
+	
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
 
 	public void setHiredate(Date hiredate) {
 		this.hiredate = hiredate;
-	}
-
-	public void setJobcandidates(List<Jobcandidate> jobcandidates) {
-		this.jobcandidates = jobcandidates;
 	}
 
 	public void setJobtitle(String jobtitle) {
@@ -260,6 +189,16 @@ public class Employee implements Serializable {
 
 	public void setVacationhours(Integer vacationhours) {
 		this.vacationhours = vacationhours;
+	}
+
+
+	public Person getPerson() {
+		return person;
+	}
+
+
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 
 }

@@ -84,12 +84,12 @@ public class AdminController {
 		
 		if(bindingResult.hasErrors()) {
 			model.addAttribute("countryregion", countryregion);
-			countryregion.setCountryregioncode(id+"");
+			countryregion.setCountryregionid(id);
 			model.addAttribute("countries", da.getAllCountries());
 			return "admin/updateCountry";
 		}
 		if (!action.equalsIgnoreCase("Cancelar") || !action.equalsIgnoreCase("Cancel")) {
-			countryregion.setCountryregioncode(id +"");
+			countryregion.setCountryregionid(id);
 			da.updateCountry(id, countryregion);
 			model.addAttribute("countries", da.getAllCountries());
 		}
@@ -159,7 +159,7 @@ public class AdminController {
 		}
 		if (!action.equalsIgnoreCase("Cancel") || !action.equalsIgnoreCase("Cancelar")) {
 			salestaxrate.setSalestaxrateid(id);
-			da.updateSales(salestaxrate.getStateprovinceid(), salestaxrate);
+			da.updateSales(salestaxrate.getStateprovince().getStateprovinceid(), salestaxrate);
 			model.addAttribute("sales",da.getAllSales());
 			
 		}

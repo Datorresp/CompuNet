@@ -7,6 +7,6 @@ import icesi.edu.co.sales.Salestaxrate;
 
 @Repository
 
-public interface SalestaxRateRepo extends CrudRepository<Salestaxrate, Long>{
+public interface SalestaxRateRepo extends CrudRepository<Salestaxrate, Integer>{
 
 }

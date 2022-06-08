@@ -7,6 +7,6 @@ import icesi.edu.co.person.Countryregion;
 
 @Repository
 
-public interface CountryRegionRepo extends CrudRepository<Countryregion, Long> {
+public interface CountryRegionRepo extends CrudRepository<Countryregion, Integer> {
 
 }

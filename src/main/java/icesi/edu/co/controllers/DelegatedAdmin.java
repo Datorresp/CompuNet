@@ -25,39 +25,44 @@ public class DelegatedAdmin {
 	private RestTemplate restTemplate;
 
 	
+	  //////////////////////////////////////////////////////////////////////////////////////
+	 ////////////////////////////////Country Region////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
+	
 	public Countryregion getCountry(int id) {
 		
-		String url = "http://localhost:8080/country/" + id;
-		Countryregion p = restTemplate.getForObject(url, Countryregion.class);
-		return p;
+		String url = "http://localhost:8080/countries/" + id;
+		Countryregion cr = restTemplate.getForObject(url, Countryregion.class);
+		return cr;
 	}
 	
 	public Iterable<Countryregion> getAllCountries(){
 		
-		String url = "http://localhost:8080/country";
-		Countryregion[] p = restTemplate.getForObject(url, Countryregion[].class);
-		
-		return Arrays.asList(p);
+		String url = "http://localhost:8080/countries";
+		Countryregion[] cr = restTemplate.getForObject(url, Countryregion[].class);
+		return Arrays.asList(cr);
 	}
 	
 	public String CreateCountry(Countryregion p) {
 		
-		String url = "http://localhost:8080/country";
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		HttpEntity<Countryregion> p1 = new HttpEntity<Countryregion>(p, headers);
+		String url = "http://localhost:8080/countries/";
 		
-		return restTemplate.exchange(url, HttpMethod.POST, p1, String.class).getBody();
+		HttpHeaders headers = new  HttpHeaders();
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		HttpEntity<Countryregion> entity = new HttpEntity<Countryregion>(p, headers);
+		
+		return restTemplate.exchange(url, HttpMethod.POST, entity, String.class).getBody();
 	}
 	
-	public String updateCountry(int id,  Countryregion p) {
+	public String updateCountry(int id, @Validated(BasicInfo.class) Countryregion p) {
 		
-		String url = "http://localhost:8080/country/" + id;
-		HttpHeaders headers = new HttpHeaders();
+		String url = "http://localhost:8080/countries/";
+		
+		HttpHeaders headers = new  HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		HttpEntity<Countryregion> p1 = new HttpEntity<Countryregion>(p, headers);
+		HttpEntity<Countryregion> entity = new HttpEntity<Countryregion>(p, headers);
 		
-		return restTemplate.exchange(url, HttpMethod.PUT, p1, String.class).getBody();
+		return restTemplate.exchange(url + id, HttpMethod.PUT, entity, String.class).getBody();
 		
 	}
 	
@@ -68,82 +73,45 @@ public class DelegatedAdmin {
 	
 	public Salestaxrate getSales(int id) {
 		
-		String url = "http://localhost:8080/sales/"+ id;
-		Salestaxrate p = restTemplate.getForObject(url, Salestaxrate.class);
-		return p;
+		String url = "http://localhost:8080/sales/" + id;
+		Salestaxrate sr = restTemplate.getForObject(url, Salestaxrate.class);
+		return sr;
 	}
 	
 	public Iterable<Salestaxrate> getAllSales(){
 		
-		String url = "http://localhost:8080/sales";
-		Salestaxrate[] p = restTemplate.getForObject(url, Salestaxrate[].class);
+		String url = "http://localhost:8080/sales/";
+		Salestaxrate[] sr = restTemplate.getForObject(url, Salestaxrate[].class);
 		
-		return Arrays.asList(p);		
+		return Arrays.asList(sr);	
 	}
 	
 	public String CreateSales(Salestaxrate p) {
 		
-		String url = "http://localhost:8080/sales";
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		HttpEntity<Salestaxrate> p1 = new HttpEntity<Salestaxrate>(p, headers);
-		
-		return restTemplate.exchange(url, HttpMethod.POST, p1, String.class).getBody();
-	}
-	
-	public String updateSales(int id,  Salestaxrate p) {
-		
-		String url = "http://localhost:8080/sales/" + id;
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		HttpEntity<Salestaxrate> p1 = new HttpEntity<Salestaxrate>(p, headers);
-		
-		return restTemplate.exchange(url, HttpMethod.PUT, p1, String.class).getBody();
-		
-	}
-	
-	
-	
-	//--------------------------------------------------------------------------------------------
-	
-	
-	public Person getPerson(Integer id) {
-		String url = "http://localhost:8080/persons/" + id;
-		Person p = restTemplate.getForObject(url, Person.class);
-		return p;
-	}
-	
-	
-	public Iterable<Person> getAllPersons(){
-		String url = "http://localhost:8080/persons";
-		Person[] p = restTemplate.getForObject(url, Person[].class);
-		return Arrays.asList(p);
-	}
-	
-	
-	public String createPerson(Person cr) {
-		String url = "http://localhost:8080/persons/";
+		String url = "http://localhost:8080/sales/";
 		
 		HttpHeaders headers = new  HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		HttpEntity<Person> entity = new HttpEntity<Person>(cr, headers);
+		HttpEntity<Salestaxrate> entity = new HttpEntity<Salestaxrate>(p, headers);
 		
 		return restTemplate.exchange(url, HttpMethod.POST, entity, String.class).getBody();
-		
 	}
 	
-	public String updatePerson(long id, @Validated(BasicInfo.class) Person cr) {
-		String url = "http://localhost:8080/persons/";
+	public String updateSales(int id,  @Validated(BasicInfo.class) Salestaxrate p) {
+		
+		String url = "http://localhost:8080/sales/";
 		
 		HttpHeaders headers = new  HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		HttpEntity<Person> entity = new HttpEntity<Person>(cr, headers);
+		HttpEntity<Salestaxrate> entity = new HttpEntity<Salestaxrate>(p, headers);
 		
 		return restTemplate.exchange(url + id, HttpMethod.PUT, entity, String.class).getBody();
+		
 	}
 	
-	//EMPLOYEE
-	//---------------------------------------------------------------------------------------------
+	  //////////////////////////////////////////////////////////////////////////////////////
+	 ////////////////////////////////Employee//////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
 	
 	public Employee getEmployee(Integer id) {
 		String url = "http://localhost:8080/employees/" + id;
@@ -180,6 +148,47 @@ public class DelegatedAdmin {
 		return restTemplate.exchange(url + id, HttpMethod.PUT, entity, String.class).getBody();
 	}
 	
+	
+	  //////////////////////////////////////////////////////////////////////////////////////
+	 ////////////////////////////////Person////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
+	
+	public Person getPerson(Integer id) {
+		String url = "http://localhost:8080/persons/" + id;
+		Person p = restTemplate.getForObject(url, Person.class);
+		return p;
+	}
+	
+	
+	public Iterable<Person> getAllPersons(){
+		String url = "http://localhost:8080/persons";
+		Person[] p = restTemplate.getForObject(url, Person[].class);
+		return Arrays.asList(p);
+	}
+	
+	
+	public String createPerson(Person cr) {
+		String url = "http://localhost:8080/persons/";
+		
+		HttpHeaders headers = new  HttpHeaders();
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		HttpEntity<Person> entity = new HttpEntity<Person>(cr, headers);
+		
+		return restTemplate.exchange(url, HttpMethod.POST, entity, String.class).getBody();
+		
+	}
+	
+	public String updatePerson(long id, @Validated(BasicInfo.class) Person cr) {
+		String url = "http://localhost:8080/persons/";
+		
+		HttpHeaders headers = new  HttpHeaders();
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		HttpEntity<Person> entity = new HttpEntity<Person>(cr, headers);
+		
+		return restTemplate.exchange(url + id, HttpMethod.PUT, entity, String.class).getBody();
+	}
+	
+
 	
 	
 	
